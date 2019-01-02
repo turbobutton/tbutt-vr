@@ -9,7 +9,7 @@ namespace TButt.Editor
     {
         public static readonly string settingsPath = "Assets/Resources/";   // Location of the TButtSettings folder.
 
-        public static readonly string versionNum = "1.0.0";
+        public static readonly string versionNum = "1.0.1";
 
         // Misc
         public static string logsDef = "TB_ENABLE_LOGS";
@@ -102,6 +102,25 @@ namespace TButt.Editor
                 wantedTargets = new string[1] { TBSettings.VRDeviceNames.Daydream };
             SetPlayerSettingsSDKs(BuildTargetGroup.Android, wantedTargets, currentTargets);
             #endregion
+        }
+
+        public static void SetTButtSDKForPlatform(TButt.VRPlatform platform)
+        {
+            switch(platform)
+            {
+                case VRPlatform.OculusPC:
+                case VRPlatform.OculusMobile:
+                    PlayerSettings.SetVirtualRealitySDKs(BuildTargetGroup.Standalone, new string[] { TBSettings.VRDeviceNames.Oculus });
+                    PlayerSettings.SetVirtualRealitySDKs(BuildTargetGroup.Android, new string[] { TBSettings.VRDeviceNames.Oculus });
+                    TBEditorDefines.SetPlatformDefine(steamVRDef, false);
+                    TBEditorDefines.SetPlatformDefine(oculusDef, true);
+                    break;
+                case VRPlatform.SteamVR:
+                    PlayerSettings.SetVirtualRealitySDKs(BuildTargetGroup.Standalone, new string[] { TBSettings.VRDeviceNames.SteamVR });
+                    TBEditorDefines.SetPlatformDefine(steamVRDef, true);
+                    TBEditorDefines.SetPlatformDefine(oculusDef, false);
+                    break;
+            }
         }
 
         static void SetPlayerSettingsSDKs(BuildTargetGroup group, string[] wantedSDKs, string[] targetSDKs)

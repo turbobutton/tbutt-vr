@@ -9,7 +9,6 @@ namespace TButt
     public static class TBDataManager
     {
         public static string persistentDataPath = Application.persistentDataPath + "/";
-        private static string _encryptionPassword = "O!^KNin8!mxnbxkN3*8!0!Kd%0912C1u";
 
         /// <summary>
         /// Serializes an object to JSON and writes it to a file.
@@ -17,8 +16,7 @@ namespace TButt
         /// <param name="obj"></param>
         /// <param name="fileName"></param>
         /// <param name="pathType"></param>
-        /// <param name="useEncryption"></param>
-        public static void SerializeObjectToFile(System.Object obj, string fileName, PathType pathType = PathType.PersistentDataPath, bool useEncryption = false)
+        public static void SerializeObjectToFile(System.Object obj, string fileName, PathType pathType = PathType.PersistentDataPath)
         {
             if (obj == null)
             {
@@ -26,7 +24,7 @@ namespace TButt
                 return;
             }
 
-            string serializedString = SerializeString(obj, useEncryption);
+            string serializedString = SerializeString(obj);
 
             string path = GetPathForType(pathType);
 
@@ -42,7 +40,7 @@ namespace TButt
         /// <typeparam name="T"></typeparam>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public static T DeserializeFromFile<T>(string fileName, PathType pathType = PathType.PersistentDataPath, bool useEncryption = false)
+        public static T DeserializeFromFile<T>(string fileName, PathType pathType = PathType.PersistentDataPath)
         {
             // Need to handle resource folder files a bit differently.
             if (pathType == PathType.ResourcesFolder)
@@ -56,7 +54,7 @@ namespace TButt
                     return GetNullOrEmptyOfType<T>();
                 else
                 {
-                    return DeserializeString<T>(rawString, fileName, useEncryption);
+                    return DeserializeString<T>(rawString, fileName);
                 }
             }
 
@@ -68,7 +66,7 @@ namespace TButt
 
             serializedString = LoadStringFromStorageDefault(path + fileName);
 
-            return DeserializeString<T>(serializedString, fileName, useEncryption);
+            return DeserializeString<T>(serializedString, fileName);
         }
 
         public static void SaveStringToStorageDefault(string serializedString, string pathAndFileName)
@@ -109,28 +107,12 @@ namespace TButt
         /// <typeparam name="T"></typeparam>
         /// <param name="serializedString"></param>
         /// <param name="fileName"></param>
-        /// <param name="useEncryption"></param>
         /// <returns></returns>
-        public static T DeserializeString<T>(string serializedString, string fileName, bool useEncryption = false)
+        public static T DeserializeString<T>(string serializedString, string fileName)
         {
             if (!string.IsNullOrEmpty(serializedString))
             {
                 T convertedObject;
-
-                if (useEncryption)
-                {
-                    try
-                    {
-                        string decryptedString;
-                        decryptedString = TBDataEncryptor.Decrypt(serializedString, _encryptionPassword);
-                        convertedObject = (T)JsonUtility.FromJson(decryptedString, typeof(T));
-                        return convertedObject;
-                    }
-                    catch
-                    {
-                        Debug.LogError("Attempted to deserialize an encrypted string, but was not able to cast to the requested type T. Will now attempt to deserialize without decrypting.");
-                    }
-                }
 
                 // If the data isn't null or empty, return it as the requested object type.
                 try
@@ -153,7 +135,7 @@ namespace TButt
             }
         }
 
-        public static string SerializeString(System.Object obj, bool useEncryption = false)
+        public static string SerializeString(System.Object obj)
         {
             string serializedString;
             if (obj.GetType() == typeof(string))
@@ -162,9 +144,6 @@ namespace TButt
             {
                 serializedString = JsonUtility.ToJson(obj);
             }
-
-            if (useEncryption)
-                serializedString = TBDataEncryptor.Encrypt(serializedString, _encryptionPassword);
 
             return serializedString;
         }
@@ -215,18 +194,8 @@ namespace TButt
 
         public static void DeleteDataFile(string fileName, PathType pathType)
         {
-#if UNITY_PS4 && !UNITY_EDITOR
-            if (fileName.Contains(".json"))
-            {
-                fileName = fileName.Substring(0, fileName.IndexOf(".json") - 1);
-            }
-
-            if (PlayerPrefs.HasKey(fileName))
-                PlayerPrefs.DeleteKey(fileName);
-#else
             if (File.Exists(GetPathForType(pathType) + fileName))
                 File.Delete(GetPathForType(pathType) + fileName);
-#endif
         }
 
         public static string ReadStringFromFile(string fileName, PathType pathType)
@@ -274,15 +243,6 @@ namespace TButt
                 }
             }
         }
-
-        public static string EncryptWithPassword(string serializedString)
-        {
-            return TBDataEncryptor.Encrypt(serializedString, _encryptionPassword);
-        }
-
-#region STRING SERIALIZATION
-
-#endregion
 
 #region JSON WRAPPER
         // Wrapper for successfully serializing arrays in Unity's native JSON utility.

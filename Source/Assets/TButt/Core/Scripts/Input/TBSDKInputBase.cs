@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TButt;
+using UnityEngine.XR;
 
 namespace TButt.Input
 {
@@ -39,6 +40,9 @@ namespace TButt.Input
         HandTrackingOffsets GetControllerTrackingOffsets(TBInput.Controller controller);
 
         // Info checks
+        #if UNITY_2018_3_OR_NEWER
+        InputDevice GetUnityXRInputDevice(TBInput.Controller controller);
+        #endif
         TBInput.Controller GetActiveController();
         string GetControllerName(TBInput.Controller controller);
         VRController GetControllerModel(TBInput.Controller controller);
@@ -161,6 +165,24 @@ namespace TButt.Input
                     return TBInput.Controller.None;
             }
         }
+
+        #if UNITY_2018_3_OR_NEWER
+        public virtual InputDevice GetUnityXRInputDevice(TBInput.Controller controller)
+        {
+            if(controller == TBInput.Controller.Active)
+                controller = GetActiveController();
+
+            switch (controller)
+            {
+                case TBInput.Controller.LHandController:
+                    return InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
+                case TBInput.Controller.RHandController:
+                    return InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+                default:
+                    return InputDevices.GetDeviceAtXRNode(XRNode.GameController);
+            }
+        }
+        #endif
 
         public virtual string GetControllerName(TBInput.Controller controller)
         {

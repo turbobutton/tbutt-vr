@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TButt;
+using UnityEngine.XR;
 #if TB_WINDOWS_MR
 using UnityEngine.XR.WSA.Input;
 #endif
@@ -89,7 +90,7 @@ namespace TButt.Input
                     return -1;
             }
         }
-
+        
         public bool GetState(Button button, InteractionSourceState[] state, TBInput.Controller controller)
         {
             int id = GetControllerID(controller);
@@ -134,7 +135,7 @@ namespace TButt.Input
         public override bool SetRumble(TBInput.Controller controller, float strength)
         {
             #if UNITY_2018_3_OR_NEWER
-            return false;
+            return GetUnityXRInputDevice(controller).SendHapticImpulse(0, strength, Time.deltaTime);
             #else
             return false;
             #endif
