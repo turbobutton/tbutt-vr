@@ -3,7 +3,7 @@ name: Bug Report
 about: Let us know about a bug that needs fixing.
 title: ''
 labels: bug
-assignees: hlink
+assignees: ''
 
 ---
 
