@@ -2,7 +2,7 @@
 name: Feature Request
 about: Suggest a new feature for TButt.
 title: ''
-labels: enhancement
+labels: feature
 assignees: ''
 
 ---
