@@ -286,8 +286,7 @@ namespace TButt.Editor
             }
             else
             {
-                GUI.contentColor = Color.red;
-                groupToggle = EditorGUILayout.ToggleLeft(new GUIContent("Disabled"), groupToggle, GUILayout.Width(controllerLabelColumnWidth + controllerLabelColumnWidthRemainder));
+                groupToggle = EditorGUILayout.ToggleLeft(new GUIContent("Enable"), groupToggle, GUILayout.Width(controllerLabelColumnWidth + controllerLabelColumnWidthRemainder));
             }
         }
 #endregion
