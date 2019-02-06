@@ -81,7 +81,7 @@ namespace TButt.Editor
         void OnGUI()
         {
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
-            EditorGUILayout.HelpBox(new GUIContent("Vive Controller support through Oculus Utiltiies is only used as a fallback if Steam VR plugin is not enabled. Note that you must disable this feature before making a build for Oculus Store, since Open VR DLLs are not permitted in builds for Oculus."));
+            EditorGUILayout.HelpBox("Vive Controller support through Oculus Utiltiies is only used as a fallback if Steam VR plugin is not enabled. Note that you must disable this feature before making a build for Oculus Store, since Open VR DLLs are not permitted in builds for Oculus.", MessageType.Info);
             TBEditorInputSettings.ShowMaps<OVRInput.RawButton>(ref TBEditorInputOculus.controllers, TBController_Oculus_ViveControllerLeft.instance.GetDefaultDefs(), TBController_Oculus_ViveControllerLeft.instance.GetName(), TBEditorStyles.sectionOverlayOculus, TBEditorStyles.solidOculus);
             TBEditorInputSettings.ShowMaps<OVRInput.RawButton>(ref TBEditorInputOculus.controllers, TBController_Oculus_ViveControllerRight.instance.GetDefaultDefs(), TBController_Oculus_ViveControllerRight.instance.GetName(), TBEditorStyles.sectionOverlayOculus, TBEditorStyles.solidOculus);
             EditorGUILayout.EndScrollView();
