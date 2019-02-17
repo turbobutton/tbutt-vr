@@ -32,17 +32,21 @@ namespace TButt
         private float _stereoSeparation = 0;
         [HideInInspector]
         private OpaqueSortMode _sortMode = OpaqueSortMode.Default;
+        [HideInInspector]
+        private float _fieldOfView;
 
         private CameraMode _cameraMode;
         private float _startingScale;
 
-        private Camera _primaryCamera;
+        protected Camera _primaryCamera;
+        protected Camera _2DCamera;
 
         private Transform _centerEyeTransform;
         private Transform _leftEyeTransform;
         private Transform _rightEyeTransform;
 
         private TBCameraBase _baseCamera;
+        private TBCameraBase _base2DCamera;
 
         private Transform _trackingVolume;
         private Transform _audioListenerTransform;	// Workaround for OVR Audio camera scale bug
@@ -52,53 +56,116 @@ namespace TButt
         private bool _initialized = false;
         private Transform _blackoutSphere;
 
+        protected virtual void OnEnable()
+        {
+            if (_initialized)
+            {
+                TBCore.Events.OnVRModeEnabled += EnableVRCamera;
+            }
+        }
+
+        protected virtual void OnDisable()
+        {
+            if(_initialized)
+            {
+                TBCore.Events.OnVRModeEnabled -= EnableVRCamera;
+            }
+        }
+
         public virtual void Initialize()
         {
             if (_initialized)
                 return;
 
+            TBCore.Events.OnVRModeEnabled += EnableVRCamera;
+
             instance = this;
             _initialized = true;
             _startingScale = transform.localScale.x;
             TBLogging.LogMessage("Assigned new TBCameraRig instance...");
+
             ReadInitialCameraSettings();
-            if (TBCore.GetActivePlatform() != VRPlatform.None)
-            {
-                _trackingVolume = new GameObject().transform;
-                _trackingVolume.gameObject.name = "Tracking Volume";
-                _trackingVolume.MakeZeroedChildOf(transform);
-            }
-            SetupCameraForPlatform(TBCore.GetActivePlatform());
 
-            if (_useBlackoutSphere)
-            {
-                _blackoutSphere = (Instantiate(Resources.Load("BlackoutSphere")) as GameObject).transform;
-                _blackoutSphere.gameObject.SetActive(false);
-                _blackoutSphere.SetParent(_centerEyeTransform);
-                _blackoutSphere.localScale = Vector3.one * 2;
-                _blackoutSphere.localPosition = Vector3.zero;
-            }
-        }
+            _trackingVolume = new GameObject().transform;
+            _trackingVolume.gameObject.name = "Tracking Volume";
+            _trackingVolume.MakeZeroedChildOf(transform);
 
-        private void SetupCameraForPlatform(VRPlatform platform)
-        {
-            switch (platform)
+            _centerEyeTransform = new GameObject().transform;
+            _centerEyeTransform.gameObject.name = "Standard VR Camera";
+
+            if (TBCore.UsingVRMode() && (TBCore.GetActivePlatform() != VRPlatform.None))
             {
-                default:
-                    SetupNativeCamera(platform);
-                    DestroyTempCamera();
-                    break;
-                case VRPlatform.None:
-                    _primaryCamera = GetComponent<Camera>();
-                    _centerEyeTransform = transform;
-                    break;
+                SetupVRCamera();
+                SetMainCamera(_primaryCamera, true);
             }
+            else
+            {
+                Setup2DCamera();
+                SetMainCamera(_2DCamera, true);
+            }
+
+            DestroyTempCamera();
+
             _audioListenerTransform = new GameObject("AudioListener").transform;
             _audioListener = _audioListenerTransform.gameObject.AddComponent<AudioListener>();
             _audioListenerTransform.gameObject.AddComponent<TBAudioListener>();
+
+            if (TBTracking.OnNodeConnected != null)
+            {
+                TBTracking.OnNodeConnected(UnityEngine.XR.XRNode.CenterEye, _centerEyeTransform);
+                TBTracking.OnNodeConnected(UnityEngine.XR.XRNode.Head, _centerEyeTransform);
+                TBTracking.OnNodeConnected(UnityEngine.XR.XRNode.TrackingReference, _trackingVolume);
+            }
         }
 
-        #if UNITY_EDITOR
+        protected virtual void SetupVRCamera()
+        {
+            if (_baseCamera == null)
+            {
+                SetupNativeCamera(TBCore.GetActivePlatform());
+
+                if (_useBlackoutSphere)
+                {
+                    _blackoutSphere = (Instantiate(Resources.Load("BlackoutSphere")) as GameObject).transform;
+                    _blackoutSphere.gameObject.SetActive(false);
+                    _blackoutSphere.SetParent(_centerEyeTransform);
+                    _blackoutSphere.localScale = Vector3.one * 2;
+                    _blackoutSphere.localPosition = Vector3.zero;
+                }
+            }
+        }
+
+        protected virtual void Setup2DCamera()
+        {
+            if (_2DCamera == null)
+            {
+                _2DCamera = new GameObject("2D Camera").AddComponent<Camera>();
+                _base2DCamera = _2DCamera.gameObject.AddComponent<TBCamera2D>();
+                _2DCamera.transform.MakeZeroedChildOf(_trackingVolume);
+                _base2DCamera.Initialize();
+            }
+
+            _base2DCamera.transform.localRotation = Quaternion.identity;
+        }
+
+        protected virtual void SetMainCamera(Camera camera, bool on)
+        {
+            if (camera == null)
+                return;
+
+            camera.enabled = on;
+
+            if (on)
+            {
+                camera.gameObject.tag = "MainCamera";
+            }
+            else
+            {
+                camera.gameObject.tag = "Untagged";
+            }
+        }
+
+#if UNITY_EDITOR
         protected void Update()
         {
             if (_baseCamera == null)
@@ -120,51 +187,41 @@ namespace TButt
             depth = sceneCamera.depth;
             stereoConvergence = sceneCamera.stereoConvergence;
             stereoSeparation = sceneCamera.stereoSeparation;
+            fieldOfView = sceneCamera.fieldOfView;
         }
 
         private void SetupNativeCamera(VRPlatform platform)
         {
-            _centerEyeTransform = new GameObject().transform;
-            _centerEyeTransform.MakeZeroedChildOf(_trackingVolume);
-            _centerEyeTransform.gameObject.name = "Standard VR Camera";
-            _centerEyeTransform.gameObject.tag = "MainCamera";
-            _primaryCamera = _centerEyeTransform.gameObject.AddComponent<Camera>();
-            switch (platform)
-            {
-                case VRPlatform.OculusMobile:
-                case VRPlatform.OculusPC:
-                    _cameraMode = CameraMode.Single;
-                    _baseCamera = _primaryCamera.gameObject.AddComponent<TBCameraOculus>();
-                    break;
-                case VRPlatform.SteamVR:
-                    _cameraMode = CameraMode.Single;
-                    _baseCamera = _primaryCamera.gameObject.AddComponent<TBSteamVRCamera>();
-                    break;
-                #if TB_HAS_UNITY_PS4
-                case VRPlatform.PlayStationVR:
-                    _cameraMode = CameraMode.Single;
-                    _baseCamera = _primaryCamera.gameObject.AddComponent<TBCameraPSVR>();
-                    break;
-                #endif
-                case VRPlatform.Daydream:
-                    _cameraMode = CameraMode.Single;
-                    _baseCamera = _primaryCamera.gameObject.AddComponent<TBCameraGoogle>();
-                    break;
-                default:
-                    _cameraMode = CameraMode.Single;
-                    _baseCamera = _primaryCamera.gameObject.AddComponent<TBCameraBase>();
-                    break;
-            }
-            _baseCamera.Initialize();
+                _primaryCamera = _centerEyeTransform.gameObject.AddComponent<Camera>();
+                switch (platform)
+                {
+                    case VRPlatform.OculusMobile:
+                    case VRPlatform.OculusPC:
+                        _cameraMode = CameraMode.Single;
+                        _baseCamera = _primaryCamera.gameObject.AddComponent<TBCameraOculus>();
+                        break;
+                    case VRPlatform.SteamVR:
+                        _cameraMode = CameraMode.Single;
+                        _baseCamera = _primaryCamera.gameObject.AddComponent<TBSteamVRCamera>();
+                        break;
+                    #if TB_HAS_UNITY_PS4
+                    case VRPlatform.PlayStationVR:
+                        _cameraMode = CameraMode.Single;
+                        _baseCamera = _primaryCamera.gameObject.AddComponent<TBCameraPSVR>();
+                        break;
+                    #endif
+                    case VRPlatform.Daydream:
+                        _cameraMode = CameraMode.Single;
+                        _baseCamera = _primaryCamera.gameObject.AddComponent<TBCameraGoogle>();
+                        break;
+                    default:
+                        _cameraMode = CameraMode.Single;
+                        _baseCamera = _primaryCamera.gameObject.AddComponent<TBCameraBase>();
+                        break;
+                }
+                _baseCamera.Initialize();
 
-            if (TBTracking.OnNodeConnected != null)
-            {
-                TBTracking.OnNodeConnected(UnityEngine.XR.XRNode.CenterEye, _centerEyeTransform);
-                TBTracking.OnNodeConnected(UnityEngine.XR.XRNode.Head, _centerEyeTransform);
-                TBTracking.OnNodeConnected(UnityEngine.XR.XRNode.TrackingReference, _trackingVolume);
-            }
-
-            _trackingVolume.localScale = Vector3.one;
+                _trackingVolume.localScale = Vector3.one;
         }
 
         /// <summary>
@@ -322,6 +379,18 @@ namespace TButt
                     Events.OnDepthChanged();
             }
         }
+
+        [HideInInspector]
+        public float fieldOfView
+        {
+            get { return _fieldOfView; }
+            set
+            {
+                _depth = value;
+                if (Events.OnFOVChanged != null)
+                    Events.OnFOVChanged();
+            }
+        }
         #endregion
 
         public CameraMode GetCameraMode()
@@ -333,6 +402,12 @@ namespace TButt
         {
             Single,
             Dual
+        }
+
+        public void EnableVRCamera(bool on)
+        {
+            SetMainCamera(_2DCamera, !on);
+            SetMainCamera(_primaryCamera, on);
         }
 
         public Camera GetCenterEyeCamera()
@@ -417,6 +492,10 @@ namespace TButt
             /// Fired when TBCameraRig's stereo separation changes.
             /// </summary>
             public static CameraSettingChangeEvent OnStereoSeparationChanged;
+            /// <summary>
+            /// Fired when TBCameraRig's FOV changes.
+            /// </summary>
+            public static CameraSettingChangeEvent OnFOVChanged;
         }
     }
 }

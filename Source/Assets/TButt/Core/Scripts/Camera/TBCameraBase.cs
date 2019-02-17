@@ -11,7 +11,7 @@ namespace TButt
     {
         protected Camera _camera;
 
-        protected void Awake()
+        protected virtual void Awake()
         {
             _camera = GetComponent<Camera>();
             UpdateEverything();
@@ -44,7 +44,7 @@ namespace TButt
             UnityEngine.XR.InputTracking.Recenter();
         }
 
-        protected void OnEnable()
+        protected virtual void OnEnable()
         {
             TBCameraRig.Events.OnClearFlagsChanged += UpdateClearFlags;
             TBCameraRig.Events.OnBackgroundColorChanged += UpdateBackgroundColor;
@@ -58,7 +58,7 @@ namespace TButt
             TBCameraRig.Events.OnDepthChanged += UpdateDepth;
         }
 
-        protected void OnDisable()
+        protected virtual void OnDisable()
         {
             TBCameraRig.Events.OnClearFlagsChanged -= UpdateClearFlags;
             TBCameraRig.Events.OnBackgroundColorChanged -= UpdateBackgroundColor;

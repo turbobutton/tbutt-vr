@@ -9,7 +9,7 @@ namespace TButt.Editor
     {
         public static readonly string settingsPath = "Assets/Resources/";   // Location of the TButtSettings folder.
 
-        public static readonly string versionNum = "1.0.1";
+        public static readonly string versionNum = "1.0.2";
 
         // Misc
         public static string logsDef = "TB_ENABLE_LOGS";
@@ -27,6 +27,7 @@ namespace TButt.Editor
         public static readonly string psnServiceDef = "TB_PSN_SERVICE";
         public static readonly string xboxServiceDef = "TB_XBOX_SERVICE";
 
+        //static TBEditorServiceSettings.Services services;
         static string buildDefString = "";
 
         public static void SetScriptingDefines()
@@ -123,7 +124,38 @@ namespace TButt.Editor
             }
         }
 
-        static void SetPlayerSettingsSDKs(BuildTargetGroup group, string[] wantedSDKs, string[] targetSDKs)
+        /*
+        public static void SetTButtService(VRService service, TBEditorServiceSettings.Services servicesOverride )
+        {
+            services = new TBEditorServiceSettings.Services();
+
+            switch (service)
+            {
+                case VRService.Oculus:
+                    services.oculus = true;
+                    break;
+                case VRService.Steam:
+                    services.steam = true;
+                    break;
+                case VRService.XboxLive:
+                    services.xbox = true;
+                    break;
+                case VRService.PSN:
+                    services.psn = true;
+                    break;
+            }
+
+            TBEditorDefines.SetPlatformDefine(TBEditorDefines.oculusServiceDef, services.oculus);
+            TBEditorDefines.SetPlatformDefine(TBEditorDefines.steamServiceDef, services.steam);
+            TBEditorDefines.SetPlatformDefine(TBEditorDefines.xboxServiceDef, services.xbox);
+
+            #if TB_HAS_UNITY_PS4
+            TBEditorDefines.SetPlatformDefine(TBEditorDefines.psnServiceDef, services.psn);
+            #endif
+        }
+        */
+
+        public static void SetPlayerSettingsSDKs(BuildTargetGroup group, string[] wantedSDKs, string[] targetSDKs)
         {
             bool needRefresh = false;
 

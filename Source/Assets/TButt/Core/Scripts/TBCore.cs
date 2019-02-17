@@ -132,21 +132,33 @@ namespace TButt
 
         private void ToggleVRMode(bool on) // TODO
         {
-            if(on)
+            if (on)
             {
-                if(UnityEngine.XR.XRSettings.enabled)
-                {
-                    if(!_initialized)
-                    {
-
-                    }
-                }
-                else
+                if (!UsingVRMode())
                 {
                     if (!_initialized)
                     {
-
+                      
                     }
+
+                    if (Events.OnVRModeEnabled != null)
+                        Events.OnVRModeEnabled(true);
+                }
+                else
+                {
+                    TBLogging.LogWarning("Tried to enter VR mode, but we were already using VR Mode.");
+                }
+            }
+            else
+            {
+                if (UsingVRMode())
+                {
+                    TBLogging.LogWarning("Tried to exit VR mode, but we were already out of VR Mode.");
+                }
+                else
+                {
+                    if (Events.OnVRModeEnabled != null)
+                        Events.OnVRModeEnabled(false);
                 }
             }
         }
@@ -218,6 +230,11 @@ namespace TButt
 #endif
         }
 
+        public static bool UsingVRMode()
+        {
+            return UnityEngine.XR.XRSettings.enabled;
+        }
+
         public static bool IsNativeIntegration()
         {
             switch(GetActivePlatform())
@@ -269,6 +286,7 @@ namespace TButt
             public static TBCoreSystemEvent OnHMDConnected;
             public static TBCoreSystemEvent OnSystemMenu;
             public static TBCoreSystemEvent OnHMDMounted;
+            public static TBCoreSystemEvent OnVRModeEnabled;
             public static TBCoreEvent OnTrackingReset;
             public static TBCoreEvent OnSystemSuspend;
             public static TBCoreEvent OnSystemResume; 

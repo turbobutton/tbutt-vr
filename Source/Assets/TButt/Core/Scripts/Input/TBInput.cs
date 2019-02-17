@@ -32,6 +32,8 @@ namespace TButt
         private static ITBSDKInput _activeSDK;
         private static bool _hasActiveSDK;
 
+        private static Dictionary<ControlType, bool> _supportedControllerTypes;
+
         #region VIRTUAL BUTTON AND CONTROLLER TYPES
         [Flags]
         public enum Button
@@ -116,7 +118,15 @@ namespace TButt
         /// </summary>
         public static void Initialize(VRPlatform platform)
         {
-            TBCore.OnUpdate += TBInput.Update;          
+            TBCore.OnUpdate += TBInput.Update;
+
+            _supportedControllerTypes = new Dictionary<ControlType, bool>();
+
+            // Cache supported input types.
+            _supportedControllerTypes.Add(ControlType.HandControllers, TBSettings.GetControlSettings().supportsHandControllers);
+            _supportedControllerTypes.Add(ControlType.Mobile3DOFController, TBSettings.GetControlSettings().supports3DOFControllers);
+            _supportedControllerTypes.Add(ControlType.Gamepad, TBSettings.GetControlSettings().supportsGamepad);
+            _supportedControllerTypes.Add(ControlType.ClickRemote, TBSettings.GetControlSettings().supportsClickRemote);
 
 #if UNITY_EDITOR
             _activeControlType = TBSettings.GetControlSettings().defaultEditorControlType;
@@ -544,6 +554,16 @@ namespace TButt
                 return _activeSDK.GetControllerTrackingOffsets(controller);
             else
                 return new HandTrackingOffsets();
+        }
+
+        /// <summary>
+        /// Returns whether or not the control type is supported in TButt's Input Settings as defined by developer. May return true even if the active platform does NOT support the control type!
+        /// </summary>
+        /// <param name="controlType"></param>
+        /// <returns></returns>
+        public static bool SupportsControlType(TBInput.ControlType controlType)
+        {
+            return _supportedControllerTypes[controlType];
         }
 
         /// <summary>

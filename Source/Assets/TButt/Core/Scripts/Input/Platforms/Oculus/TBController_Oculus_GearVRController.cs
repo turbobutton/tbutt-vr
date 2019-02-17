@@ -15,8 +15,8 @@ namespace TButt.Input
                 if (_instance == null)
                 {
                     _instance = new TBController_Oculus_GearVRController();
-                    _instance.model = VRController.GearVRController;
-                    _instance.name = "Gear VR Controller";
+                    _instance.model = VRController.OculusGoController;
+                    _instance.name = "Oculus Go / Gear VR Controller";
                     _instance.fileName = "Maps_Oculus_GearVRController";
                     _instance.type = TBInput.Controller.Mobile3DOFController;
                     _instance.supportsRumble = false;
@@ -32,6 +32,11 @@ namespace TButt.Input
         protected override void Initialize()
         {
             loadedButtonDefs = TBInput.LoadButtonDefs(GetDefaultDefs(), fileName);
+
+            if(TBCore.GetActiveHeadset() == VRHeadset.GearVR)
+            {
+                _instance.model = VRController.GearVRController;
+            }
 
             loadedButtonDefs.Add(new TBInput.ButtonDef<OVRInput.RawButton>()
             {

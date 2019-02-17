@@ -19,13 +19,15 @@ namespace TButt.Sample
         private RectTransform _rect;
         private float _rowOffset = -42;
 
-        private void Start()
+
+
+        private IEnumerator Start()
         {
             if (TBInput.GetControllerModel(controller) == VRController.None)
             {
-                Debug.LogWarning("Input chart was disabled because no controller was found for " + controller + ". Is that input type enabled in Input Settings?");
+                Debug.Log("Input chart was disabled because no controller was found for " + controller + ". This means that the associated ControlType is disabled in TButt's Input Settings, or no compatible controller exists for the current platform.");
                 gameObject.SetActive(false);
-                return;
+                yield break;
             }
 
             controllerLabel.text = controller.ToString() + " | " + TBInput.GetControllerModel(controller).ToString();
@@ -40,6 +42,38 @@ namespace TButt.Sample
             }
 
             ConformHeights();
+
+            TBInput.ControlType assocaitedControlType = TBInput.ControlType.None;
+
+            switch(controller)
+            {
+                case TBInput.Controller.LHandController:
+                case TBInput.Controller.RHandController:
+                    assocaitedControlType = TBInput.ControlType.HandControllers;
+                    break;
+                case TBInput.Controller.Mobile3DOFController:
+                    assocaitedControlType = TBInput.ControlType.Mobile3DOFController;
+                    break;
+                case TBInput.Controller.Gamepad:
+                    assocaitedControlType = TBInput.ControlType.Gamepad;
+                    break;
+                case TBInput.Controller.ClickRemote:
+                    assocaitedControlType = TBInput.ControlType.ClickRemote;
+                    break;
+            }
+
+            if (assocaitedControlType != TBInput.GetActiveControlType())
+            {
+                gameObject.GetComponent<Canvas>().enabled = false;
+
+                while (TBInput.GetActiveControlType() == TBInput.ControlType.None)
+                {
+                    yield return null;
+                }
+
+                if (assocaitedControlType == TBInput.GetActiveControlType())
+                    gameObject.GetComponent<Canvas>().enabled = true;
+            }
         }
 
         void CreateDisplayRow(TBInput.Button button)

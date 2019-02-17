@@ -9,10 +9,10 @@ namespace TButt.Editor
 {
     public class TBEditorInputOculus
     {
-        #if TB_OCULUS
+#if TB_OCULUS
         // Create a dictionary of controllers.
         public static Dictionary<string, TBEditorInputSettings.ButtonMapGroup<TBInput.ButtonDef<OVRInput.RawButton>>> controllers = new Dictionary<string, TBEditorInputSettings.ButtonMapGroup<TBInput.ButtonDef<OVRInput.RawButton>>>();
-        #endif
+#endif
 
         /// <summary>
         /// Displays the column of controllers for the Oculus SDK in TBEditorInputSettings.
@@ -21,7 +21,7 @@ namespace TButt.Editor
         /// <param name="control"></param>
         public static void ShowOculusControllerList(bool active, TBInput.ControlType control)
         {
-            #if TB_OCULUS
+#if TB_OCULUS
             EditorGUILayout.BeginVertical();
             EditorGUI.BeginDisabledGroup(!active);
 
@@ -68,13 +68,13 @@ namespace TButt.Editor
             }
             EditorGUI.EndDisabledGroup();
             EditorGUILayout.EndVertical();
-        #endif
+#endif
         }
     }
 
     // Each controller gets its own window that extends TBButtonMapWindow. This allows multiple windows to be open at once.
 
-    #if TB_OCULUS
+#if TB_OCULUS
     #region HAND CONTROLLERS
     public class OculusViveControllerConfigWindow : TBButtonMapWindow<OculusViveControllerConfigWindow>
     {
@@ -149,5 +149,5 @@ namespace TButt.Editor
         }
     }
     #endregion
-    #endif
+#endif
 }
