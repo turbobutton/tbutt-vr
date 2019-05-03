@@ -7,28 +7,39 @@ using UnityEngine;
 public static class TBLogging
 {
     [Conditional("TB_ENABLE_LOGS")]
-    public static void LogMessage(string message, string end = "")
+    public static void LogMessage(string message, Object obj = null, string end = "")
     {
         if (string.IsNullOrEmpty(end))
             end = FormatForEditor("via TButt");
-        UnityEngine.Debug.Log(message + end);
+
+        if(obj == null)
+            UnityEngine.Debug.Log(message + end);
+        else
+            UnityEngine.Debug.Log(message + end, obj);
     }
 
     [Conditional("TB_ENABLE_LOGS")]
-    public static void LogWarning(string message, string end = "")
+    public static void LogWarning(string message, Object obj = null, string end = "")
     {
         if (string.IsNullOrEmpty(end))
             end = FormatForEditor("via TButt");
-        UnityEngine.Debug.LogWarning(message + end);
+
+        if(obj == null)
+            UnityEngine.Debug.LogWarning(message + end);
+        else
+            UnityEngine.Debug.LogWarning(message + end, obj);
     }
 
     [Conditional("TB_ENABLE_LOGS")]
-    public static void LogError(string message, string end = "")
+    public static void LogError(string message, Object obj = null, string end = "")
     {
         if (string.IsNullOrEmpty(end))
             end = FormatForEditor("via TButt");
 #if UNITY_EDITOR
-        UnityEngine.Debug.LogError("<color=red>" + message + "</color>" + end);
+        if(obj == null)
+            UnityEngine.Debug.LogError("<color=red>" + message + "</color>" + end);
+        else
+            UnityEngine.Debug.LogError("<color=red>" + message + "</color>" + end, obj);
 #else
         UnityEngine.Debug.LogError(message + end);
 #endif

@@ -59,7 +59,10 @@ namespace TButt.Settings
                     }
                     else
                     {
-                        _headset = VRHeadset.OculusRift;
+                        if (UnityEngine.XR.XRDevice.model == "Oculus Rift CV1")
+                            _headset = VRHeadset.OculusRift;
+                        else
+                            _headset = VRHeadset.OculusRiftS;
                     }
                     break;
                 case OculusDeviceFamily.GearVR:
@@ -85,14 +88,19 @@ namespace TButt.Settings
 
         public override float GetRefreshRate()
         {
-            switch(TBCore.GetActivePlatform())
+            // On PC platforms, allow for any refresh rate (like 80 or 90 for Rift / Rift S).
+            if (TBCore.GetActivePlatform() == VRPlatform.OculusPC)
             {
-                case VRPlatform.OculusPC:
-                    if (UnityEngine.XR.XRDevice.model.Contains("DK2"))
-                        return 75;
-                    break;
+                return (int)UnityEngine.XR.XRDevice.refreshRate;
             }
-            return (int)_displaySettings.refreshRate;
+
+            switch (_displaySettings.refreshRate)
+            {
+                case TBSettings.TBRefreshRate.FPS_DEFAULT:
+                        return (int)UnityEngine.XR.XRDevice.refreshRate;
+                default:
+                    return (int)_displaySettings.refreshRate;
+            }
         }
 
         protected override void PrintStartupResults()
@@ -123,7 +131,7 @@ namespace TButt.Settings
                     defaultDisplaySettings.mirrorDisplay = true;
                     defaultDisplaySettings.opaqueSortMode = UnityEngine.Rendering.OpaqueSortMode.Default;
                     defaultDisplaySettings.depthTextureMode = DepthTextureMode.None;
-                    defaultDisplaySettings.refreshRate = TBSettings.TBRefreshRate.FPS_90;
+                    defaultDisplaySettings.refreshRate = TBSettings.TBRefreshRate.FPS_DEFAULT;
                     break;
                 case OculusDeviceFamily.GearVR:
                     defaultDisplaySettings.renderscale = 1.0f;

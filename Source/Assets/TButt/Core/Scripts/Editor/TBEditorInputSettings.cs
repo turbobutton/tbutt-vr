@@ -154,7 +154,7 @@ namespace TButt.Editor
                 //TBDataManager.SerializeObjectToFile(controlSettings, settingsPath + TBSettings.settingsFolder + TBSettings.controlSettingsFileName + ".json", TBDataManager.PathType.ProjectFolder);
             }
             SaveAllButtonMaps();
-            TBLogging.LogMessage("All input settings saved.", messageEnd);
+            TBLogging.LogMessage("All input settings saved.", null, messageEnd);
         }
 
         #region CONTROLLER GROUP GUI
@@ -383,7 +383,7 @@ namespace TButt.Editor
             if (GUILayout.Button("Reset to Default", new GUILayoutOption[1] { GUILayout.Height(30) }))
             {
                 virtualButtons = defaults;
-                TBLogging.LogMessage("Reset mapping for " + buttonName + " to " + defaults[0].ToString(), messageEnd);
+                TBLogging.LogMessage("Reset mapping for " + buttonName + " to " + defaults[0].ToString(), null, messageEnd);
             }
             EditorGUILayout.EndVertical();
             EditorGUILayout.EndHorizontal();
@@ -514,12 +514,12 @@ namespace TButt.Editor
                 if (File.Exists(settingsPath + TBSettings.settingsFolder + newController.fileName + ".json"))
                 {
                     newController.defs = TBInput.LoadButtonDefs(defaultButtonDefs, fileName);
-                    TBLogging.LogMessage("Found and loaded button maps for " + controllerName + ".", messageEnd);
+                    TBLogging.LogMessage("Found and loaded button maps for " + controllerName + ".", null, messageEnd);
                 }
                 else
                 {
                     // If no custom mapping, we use the default one. A custom one will be saved if you make any changes.
-                    TBLogging.LogMessage("Could not find custom button maps for " + controllerName + " in " + settingsPath + TBSettings.settingsFolder + newController.fileName + ".json. Created new maps from default.", messageEnd);
+                    TBLogging.LogMessage("Could not find custom button maps for " + controllerName + " in " + settingsPath + TBSettings.settingsFolder + newController.fileName + ".json. Created new maps from default.", null, messageEnd);
                 }
                 controllers.Add(controllerName, newController);
                 return controllerName;
@@ -548,7 +548,7 @@ namespace TButt.Editor
         /// <param name="maps"></param>
         public static void SaveButtonMaps<T>(ButtonMapGroup<TBInput.ButtonDef<T>> maps)
         {
-            TBLogging.LogMessage("Writing maps for " + maps.controllerName + " to " + settingsPath + TBSettings.settingsFolder + maps.fileName + ".json...", messageEnd);
+            TBLogging.LogMessage("Writing maps for " + maps.controllerName + " to " + settingsPath + TBSettings.settingsFolder + maps.fileName + ".json...", null, messageEnd);
             TBInput.SerializedButtonDef[] controllerDef = new TBInput.SerializedButtonDef[maps.defs.Count];
             for (int i = 0; i < maps.defs.Count; i++)
             {
@@ -559,7 +559,7 @@ namespace TButt.Editor
             //TBDataManager.SerializeObjectToFile(TBDataManager.ToJsonWrapper<TBInput.SerializedButtonDef>(controllerDef), settingsPath + TBSettings.settingsFolder + maps.fileName + ".json", TBDataManager.PathType.ResourcesFolder);
 
             TBEditorHelper.CheckoutAndSaveJSONFile(settingsPath + TBSettings.settingsFolder + maps.fileName + ".json", TBDataManager.ToJsonWrapper<TBInput.SerializedButtonDef>(controllerDef), TBDataManager.PathType.ResourcesFolder);
-            TBLogging.LogMessage("Finished writing maps for " + maps.controllerName + ". ", messageEnd);
+            TBLogging.LogMessage("Finished writing maps for " + maps.controllerName + ". ", null, messageEnd);
         }
 
         /// <summary>

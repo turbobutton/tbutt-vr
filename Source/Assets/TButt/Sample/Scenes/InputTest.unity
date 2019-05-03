@@ -567,31 +567,6 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
-    - target: {fileID: 224564100684956654, guid: 85270dce7b1e35740bb0fd14e8aa9645,
-        type: 2}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564100684956654, guid: 85270dce7b1e35740bb0fd14e8aa9645,
-        type: 2}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564100684956654, guid: 85270dce7b1e35740bb0fd14e8aa9645,
-        type: 2}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224564100684956654, guid: 85270dce7b1e35740bb0fd14e8aa9645,
-        type: 2}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -20
-      objectReference: {fileID: 0}
-    - target: {fileID: 224931518032562798, guid: 85270dce7b1e35740bb0fd14e8aa9645,
-        type: 2}
-      propertyPath: m_LocalScale.x
-      value: -1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 85270dce7b1e35740bb0fd14e8aa9645, type: 2}
   m_IsPrefabParent: 0
@@ -717,6 +692,11 @@ Prefab:
         type: 2}
       propertyPath: m_Type
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114017279236320786, guid: 85270dce7b1e35740bb0fd14e8aa9645,
+        type: 2}
+      propertyPath: controller
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 85270dce7b1e35740bb0fd14e8aa9645, type: 2}
@@ -1276,6 +1256,11 @@ Prefab:
         type: 2}
       propertyPath: m_LocalScale.y
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114017279236320786, guid: 85270dce7b1e35740bb0fd14e8aa9645,
+        type: 2}
+      propertyPath: controller
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 85270dce7b1e35740bb0fd14e8aa9645, type: 2}

@@ -16,8 +16,8 @@ namespace TButt.Input
                 if (_instance == null)
                 {
                     _instance = new TBController_Oculus_QuestRight();
-                    _instance.name = "Oculus Quest (Right)";
-                    _instance.model = VRController.OculusQuestController;
+                    _instance.name = "Oculus Touch V2/Quest (Right)";
+                    _instance.model = VRController.OculusTouchV2;
                     _instance.fileName = "Maps_Oculus_QuestRight";
                     _instance.type = TBInput.Controller.RHandController;
                     _instance.supportsRumble = true;

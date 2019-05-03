@@ -146,14 +146,14 @@ namespace TButt
                 }
                 else
                 {
-                    TBLogging.LogWarning("Tried to enter VR mode, but we were already using VR Mode.");
+                    TBLogging.LogWarning("Tried to enter VR mode, but we were already using VR Mode.", gameObject);
                 }
             }
             else
             {
                 if (UsingVRMode())
                 {
-                    TBLogging.LogWarning("Tried to exit VR mode, but we were already out of VR Mode.");
+                    TBLogging.LogWarning("Tried to exit VR mode, but we were already out of VR Mode.", gameObject);
                 }
                 else
                 {
@@ -172,7 +172,7 @@ namespace TButt
         {
             if (rig == null)
             {
-                TBLogging.LogMessage("TBCameraRig wasn't found at startup. Waiting for TBCameraRig instance.");
+                TBLogging.LogMessage("TBCameraRig wasn't found at startup. Waiting for TBCameraRig instance.", gameObject);
                 StartCoroutine(WaitForCameraRig());
             }
             else
@@ -251,9 +251,9 @@ namespace TButt
         private IEnumerator OnApplicationFocus(bool focus)
         {
             if (focus)
-                TBLogging.LogMessage("Application regained focus!");
+                TBLogging.LogMessage("Application regained focus!", gameObject);
             else
-                TBLogging.LogMessage("Application lost focus!");
+                TBLogging.LogMessage("Application lost focus!", gameObject);
 
             yield return null;
             Internal.SetSystemMenu(focus);
@@ -268,7 +268,7 @@ namespace TButt
                 rig = FindObjectOfType<TBCameraRig>();
                 if (rig != null)
                 {
-                    TBLogging.LogMessage("TBCameraRig found!");
+                    TBLogging.LogMessage("TBCameraRig found!", gameObject);
                     InitializeCameraAndTracking(rig);
                     yield break;
                 }
@@ -304,12 +304,12 @@ namespace TButt
                         TBCore.instance.StartCheckingForHMD();
                         break;
                     default:
-                        TBLogging.LogMessage("TBCore is starting up...");
+                        TBLogging.LogMessage("TBCore is starting up...", TBCore.instance.gameObject);
                         TBSettings.Initialize();
                         TBInput.Initialize(GetActivePlatform());
                         instance.InitializePerScene();
                         DontDestroyOnLoad(instance.gameObject);
-                        TBLogging.LogMessage("TBCore has finished starting up.");
+                        TBLogging.LogMessage("TBCore has finished starting up.", TBCore.instance.gameObject);
                         _initialized = true;
                         break;
                 }
@@ -320,13 +320,13 @@ namespace TButt
                 switch(TBCore.GetActivePlatform())
                 {
                     case VRPlatform.None:
-                        TBLogging.LogWarning("Cannot handle recenter event when no HMD is loaded.");
+                        TBLogging.LogWarning("Cannot handle recenter event when no HMD is loaded.", TBCore.instance.gameObject);
                         break;
                     default:
                         UnityEngine.XR.InputTracking.Recenter();
                         break;
                 }
-                TBLogging.LogMessage("Reset tracking at Core level.");
+                TBLogging.LogMessage("Reset tracking at Core level.", TBCore.instance.gameObject);
                 if (Events.OnTrackingReset != null)
                     Events.OnTrackingReset();
             }

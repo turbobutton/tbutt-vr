@@ -329,9 +329,11 @@ namespace TButt
         [System.Serializable]
         public enum TBRefreshRate
         {
+            FPS_DEFAULT = -1,
             FPS_60  =   60,
             FPS_72 =    72,
             FPS_75 =    75,
+            FPS_80 =    80,
             FPS_90  =   90,
             FPS_120 =   120
         }
@@ -397,6 +399,7 @@ namespace TButt
 
         // Oculus PC
         OculusRift = 1,
+        OculusRiftS = 2,
 
         // Oculus Mobile
         GearVR = 200,
@@ -424,10 +427,14 @@ namespace TButt
 
         // Oculus
         OculusRemote              = 1,
+        OculusTouchV1             = 2,
+        [System.Obsolete]
         OculusTouch               = 2,
         XboxOneGamepad            = 3,
         GearVRController          = 4,
         OculusGoController        = 5,
+        OculusTouchV2             = 6,
+        [System.Obsolete]
         OculusQuestController     = 6,
         GearVRTouchpad            = 7,
 

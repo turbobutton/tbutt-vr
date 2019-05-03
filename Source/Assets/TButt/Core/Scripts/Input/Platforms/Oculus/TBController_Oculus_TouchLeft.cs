@@ -16,8 +16,17 @@ namespace TButt.Input
                 if (_instance == null)
                 {
                     _instance = new TBController_Oculus_TouchLeft();
-                    _instance.name = "Oculus Touch (Left)";
-                    _instance.model = VRController.OculusTouch;
+                    switch(TBCore.GetActiveHeadset())
+                    {
+                        case VRHeadset.OculusRift:
+                            _instance.name = "Oculus Touch V1 (Left)";
+                            _instance.model = VRController.OculusTouchV1;
+                            break;
+                        default:
+                            _instance.name = "Oculus Touch V2 (Left)";
+                            _instance.model = VRController.OculusTouchV2;
+                            break;
+                    }
                     _instance.fileName = "Maps_Oculus_TouchLeft";
                     _instance.type = TBInput.Controller.LHandController;
                     _instance.supportsRumble = true;
