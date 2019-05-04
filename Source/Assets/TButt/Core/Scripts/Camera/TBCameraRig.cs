@@ -92,6 +92,7 @@ namespace TButt
 
             _centerEyeTransform = new GameObject().transform;
             _centerEyeTransform.gameObject.name = "Standard VR Camera";
+            _centerEyeTransform.MakeZeroedChildOf(_trackingVolume);
 
             if (TBCore.UsingVRMode() && (TBCore.GetActivePlatform() != VRPlatform.None))
             {
