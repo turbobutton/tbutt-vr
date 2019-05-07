@@ -33,12 +33,14 @@ namespace TButt.Settings
             {
                 case OculusDeviceFamily.Go:
                     _headset = VRHeadset.OculusGo;
+                    _family = VRFamily.Oculus;
                     TBLogging.LogMessage("Detected Oculus Go. Forcing 3DOF controller as input type and setting CPU/GPU levels to 3.");
                     TBInput.SetActiveControlType(TBInput.ControlType.Mobile3DOFController);
                     StartCoroutine(ApplySettingsToOVRManager());
                     break;
                 case OculusDeviceFamily.Quest:
                     _headset = VRHeadset.OculusQuest;
+                    _family = VRFamily.Oculus;
                     TBLogging.LogMessage("Detected Oculus Quest. Enabling 6DOF controllers.");
                     TBInput.SetActiveControlType(TBInput.ControlType.HandControllers);
                     StartCoroutine(ApplySettingsToOVRManager());
@@ -50,6 +52,7 @@ namespace TButt.Settings
                         {
                             TBLogging.LogMessage("Oculus Utilities is now supporting HTC Vive with Open VR passthrough.");
                             _headset = VRHeadset.HTCVive;   // Fallback for Vive support with Oculus Utitlites.
+                            _family = VRFamily.HTC;
                         }
                         else
                         {
@@ -59,8 +62,11 @@ namespace TButt.Settings
                     }
                     else
                     {
+                        _family = VRFamily.Oculus;
                         if (UnityEngine.XR.XRDevice.model == "Oculus Rift CV1")
                             _headset = VRHeadset.OculusRift;
+                        else if (UnityEngine.XR.XRDevice.model == "Oculus Rift S")
+                            _headset = VRHeadset.OculusRiftS;
                         else
                             _headset = VRHeadset.OculusRiftS;
                     }

@@ -47,6 +47,10 @@ namespace TButt
             Action2 = 0x000200,
             Action3 = 0x000400,
             Action4 = 0x000800,
+            Action5 = 0x000102,
+            Action6 = 0x000202,
+            Action7 = 0x000402,
+            Action8 = 0x000802,
             DpadUp = 0x001000,
             DpadDown = 0x002000,
             DpadLeft = 0x004000,
@@ -144,10 +148,17 @@ namespace TButt
                     _activeSDK = TBInputOculus.instance;
                     break;
                 case VRPlatform.SteamVR:
+#if TB_STEAM_VR_2
+                    TBInputSteamVR2.instance.Initialize();
+                    TBCore.OnFixedUpdate += TBInputSteamVR2.instance.FixedUpdate;
+                    TBCore.OnUpdate += TBInputSteamVR2.instance.Update;
+                    _activeSDK = TBInputSteamVR2.instance;
+#else
                     TBInputSteamVR.instance.Initialize();
                     TBCore.OnFixedUpdate += TBInputSteamVR.instance.FixedUpdate;
                     TBCore.OnUpdate += TBInputSteamVR.instance.Update;
                     _activeSDK = TBInputSteamVR.instance;
+#endif
                     break;
                 case VRPlatform.Daydream:
                     TBInputGoogle.instance.Initialize();

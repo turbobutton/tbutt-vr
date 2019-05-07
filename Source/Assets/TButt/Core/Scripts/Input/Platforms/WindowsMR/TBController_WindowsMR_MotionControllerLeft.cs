@@ -27,6 +27,13 @@ namespace TButt.Input
             }
         }
 
+        protected override void SetFingerPoseButtons()
+        {
+            _instance.thumbPoseButtons = new TBWindowsMRInput.Button[] { TBWindowsMRInput.Button.Touchpad };
+            _instance.indexPoseButtons = new TBWindowsMRInput.Button[] { TBWindowsMRInput.Button.SelectTrigger };
+            _instance.gripPoseButtons = new TBWindowsMRInput.Button[] { TBWindowsMRInput.Button.Grip };
+        }
+
         public override List<TBInput.ButtonDef<TBWindowsMRInput.Button>> GetDefaultDefs()
         {
             return new List<TBInput.ButtonDef<TBWindowsMRInput.Button>>
@@ -66,21 +73,6 @@ namespace TButt.Input
 
 			return newTrackingOffsets;
 		}
-
-        public override TBWindowsMRInput.Button[] GetFingerButtons(TBInput.Finger finger)
-        {
-            switch (finger)
-            {
-                case TBInput.Finger.Thumb:
-                    return new TBWindowsMRInput.Button[] { TBWindowsMRInput.Button.Touchpad };
-                case TBInput.Finger.Index:
-                    return new TBWindowsMRInput.Button[] { TBWindowsMRInput.Button.SelectTrigger };
-                case TBInput.Finger.Grip:
-                    return new TBWindowsMRInput.Button[] { TBWindowsMRInput.Button.Grip };
-                default:
-                    return null;
-            }
-        }
     }
 }
 #endif

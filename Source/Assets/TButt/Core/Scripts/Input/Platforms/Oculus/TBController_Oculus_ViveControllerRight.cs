@@ -27,6 +27,12 @@ namespace TButt.Input
             }
         }
 
+        protected override void SetFingerPoseButtons()
+        {
+            _instance.thumbPoseButtons = new OVRInput.RawButton[] { OVRInput.RawButton.RThumbstick };
+            _instance.indexPoseButtons = new OVRInput.RawButton[] { OVRInput.RawButton.RIndexTrigger };
+        }
+
         public override List<TBInput.ButtonDef<OVRInput.RawButton>> GetDefaultDefs()
         {
             return new List<TBInput.ButtonDef<OVRInput.RawButton>>
@@ -51,19 +57,6 @@ namespace TButt.Input
                     supportsTouch = true,
                     supportsAxis2D = true }
             };
-        }
-
-        public override OVRInput.RawButton[] GetFingerButtons(TBInput.Finger finger)
-        {
-            switch (finger)
-            {
-                case TBInput.Finger.Thumb:
-                    return new OVRInput.RawButton[] { OVRInput.RawButton.RThumbstick };
-                case TBInput.Finger.Index:
-                    return new OVRInput.RawButton[] { OVRInput.RawButton.RIndexTrigger };
-                default:
-                    return null;
-            }
         }
     }
 }

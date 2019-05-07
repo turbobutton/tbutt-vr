@@ -19,13 +19,23 @@ namespace TButt.Input
                     _instance = new TBController_SteamVR_OculusTouchRight();
                     _instance.name = "Oculus Touch (Right)";
                     _instance.fileName = "Maps_SteamVR_OculusTouchRight";
-                    _instance.model = VRController.OculusTouch;
+                    if (TBCore.GetActiveHeadset() == VRHeadset.OculusRift)
+                        _instance.model = VRController.OculusTouchV1;
+                    else
+                        _instance.model = VRController.OculusTouchV2;
                     _instance.supportsRumble = true;
                     _instance.type = TBInput.Controller.RHandController;
                     _instance.Initialize();
                 }
                 return _instance;
             }
+        }
+
+        protected override void SetFingerPoseButtons()
+        {
+            _instance.thumbPoseButtons = new EVRButtonId[] { EVRButtonId.k_EButton_SteamVR_Touchpad, EVRButtonId.k_EButton_A, EVRButtonId.k_EButton_ApplicationMenu };
+            _instance.indexPoseButtons = new EVRButtonId[] { EVRButtonId.k_EButton_SteamVR_Trigger };
+            _instance.gripPoseButtons = new EVRButtonId[] { EVRButtonId.k_EButton_Grip };
         }
 
         public override List<TBInput.ButtonDef<EVRButtonId>> GetDefaultDefs()
@@ -70,21 +80,6 @@ namespace TButt.Input
 
 			return newTrackingOffsets;
 		}
-
-        public override EVRButtonId[] GetFingerButtons(TBInput.Finger finger)
-        {
-            switch (finger)
-            {
-                case TBInput.Finger.Thumb:
-                    return new EVRButtonId[] { EVRButtonId.k_EButton_SteamVR_Touchpad, EVRButtonId.k_EButton_A };
-                case TBInput.Finger.Index:
-                    return new EVRButtonId[] { EVRButtonId.k_EButton_SteamVR_Trigger };
-                case TBInput.Finger.Grip:
-                    return new EVRButtonId[] { EVRButtonId.k_EButton_Grip };
-                default:
-                    return null;
-            }
-        }
     }
 }
 #endif

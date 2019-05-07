@@ -6,26 +6,32 @@ using Valve.VR;
 
 namespace TButt.Input
 {
-    public class TBController_SteamVR_ViveControllerRight : TBControllerBase<EVRButtonId>
+    public class TBController_SteamVR_ViveControllerLeft : TBControllerBase<EVRButtonId>
     {
-        protected static TBController_SteamVR_ViveControllerRight _instance;
+        protected static TBController_SteamVR_ViveControllerLeft _instance;
 
-        public static TBController_SteamVR_ViveControllerRight instance
+        public static TBController_SteamVR_ViveControllerLeft instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new TBController_SteamVR_ViveControllerRight();
+                    _instance = new TBController_SteamVR_ViveControllerLeft();
                     _instance.model = VRController.ViveController;
-                    _instance.name = "Vive Controller (Right)";
-                    _instance.fileName = "Maps_SteamVR_ViveControllerRight";
+                    _instance.name = "Vive Controller (Left)";
+                    _instance.fileName = "Maps_SteamVR_ViveControllerLeft";
                     _instance.supportsRumble = true;
-                    _instance.type = TBInput.Controller.RHandController;
+                    _instance.type = TBInput.Controller.LHandController;
                     _instance.Initialize();
                 }
                 return _instance;
             }
+        }
+
+        protected override void SetFingerPoseButtons()
+        {
+            _instance.thumbPoseButtons = new EVRButtonId[] { EVRButtonId.k_EButton_SteamVR_Touchpad, EVRButtonId.k_EButton_ApplicationMenu };
+            _instance.indexPoseButtons = new EVRButtonId[] { EVRButtonId.k_EButton_SteamVR_Trigger };
         }
 
         public override List<TBInput.ButtonDef<EVRButtonId>> GetDefaultDefs()
@@ -62,19 +68,6 @@ namespace TButt.Input
 
 			return newTrackingOffsets;
 		}
-
-        public override EVRButtonId[] GetFingerButtons(TBInput.Finger finger)
-        {
-            switch (finger)
-            {
-                case TBInput.Finger.Thumb:
-                    return new EVRButtonId[] { EVRButtonId.k_EButton_SteamVR_Touchpad };
-                case TBInput.Finger.Index:
-                    return new EVRButtonId[] { EVRButtonId.k_EButton_SteamVR_Trigger };
-                default:
-                    return null;
-            }
-        }
     }
 }
 #endif

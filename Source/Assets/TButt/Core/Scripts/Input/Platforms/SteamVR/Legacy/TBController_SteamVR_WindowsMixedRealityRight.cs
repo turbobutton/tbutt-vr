@@ -28,6 +28,13 @@ namespace TButt.Input
             }
         }
 
+        protected override void SetFingerPoseButtons()
+        {
+            _instance.thumbPoseButtons = new EVRButtonId[] { EVRButtonId.k_EButton_SteamVR_Touchpad, EVRButtonId.k_EButton_ApplicationMenu };
+            _instance.indexPoseButtons = new EVRButtonId[] { EVRButtonId.k_EButton_SteamVR_Trigger };
+            _instance.gripPoseButtons = new EVRButtonId[] { EVRButtonId.k_EButton_Grip };
+        }
+
         public override List<TBInput.ButtonDef<EVRButtonId>> GetDefaultDefs()
         {
             return new List<TBInput.ButtonDef<EVRButtonId>>
@@ -58,21 +65,6 @@ namespace TButt.Input
                     supportsButton = false,
                     supportsAxis2D = true }
             };
-        }
-
-        public override EVRButtonId[] GetFingerButtons(TBInput.Finger finger)
-        {
-            switch (finger)
-            {
-                case TBInput.Finger.Thumb:
-                    return new EVRButtonId[] { EVRButtonId.k_EButton_SteamVR_Touchpad };
-                case TBInput.Finger.Index:
-                    return new EVRButtonId[] { EVRButtonId.k_EButton_SteamVR_Trigger };
-                case TBInput.Finger.Grip:
-                    return new EVRButtonId[] { EVRButtonId.k_EButton_Grip };
-                default:
-                    return null;
-            }
         }
     }
 }

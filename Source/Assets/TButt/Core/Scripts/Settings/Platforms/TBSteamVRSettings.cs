@@ -11,22 +11,31 @@ namespace TButt.Settings
         public override void Initialize()
         {
             _displaySettings = LoadDisplaySettings(settingsFilename);
-
-#if TB_STEAM_VR
-            string trackingSystem = SteamVR.instance.hmd_TrackingSystemName.ToLower();
+            _family = VRFamily.Windows;
+            _family = VRFamily.HTC;
+            _family = VRFamily.Valve;
+#if TB_STEAM_VR || TB_STEAM_VR_2
+            string trackingSystem = Valve.VR.SteamVR.instance.hmd_TrackingSystemName.ToLower();
 
             if (trackingSystem.Contains("holographic"))
                 _headset = VRHeadset.WindowsMR;
             else if (trackingSystem.Contains("oculus"))
             {
-                 _headset = VRHeadset.OculusRift;
+                 _family = VRFamily.Oculus;
+                if (UnityEngine.XR.XRDevice.model == "Oculus Rift CV1")
+                    _headset = VRHeadset.OculusRift;
+                else
+                    _headset = VRHeadset.OculusRiftS;
             }
             else
             {
                 _headset = VRHeadset.HTCVive;
+                _family = VRFamily.HTC;
+
             }
 #else
             _headset = VRHeadset.HTCVive;
+            _family = VRFamily.HTC;
 #endif
 
             base.Initialize();

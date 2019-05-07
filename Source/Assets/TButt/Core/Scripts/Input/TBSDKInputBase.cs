@@ -81,7 +81,13 @@ namespace TButt.Input
             emptyLookupTable = new TBInput.ButtonLookupTable<T>();
             _activeController = GetActiveController();
 
-            // Load supported input types.
+            LoadControllers();
+
+            TBCore.Events.OnSystemMenu += RefreshInput;
+        }
+
+        protected void LoadControllers()
+        {
             if (TBSettings.GetControlSettings().supportsHandControllers)
                 LoadHandControllers();
             if (TBSettings.GetControlSettings().supports3DOFControllers)
@@ -90,8 +96,6 @@ namespace TButt.Input
                 LoadClickRemotes();
             if (TBSettings.GetControlSettings().supportsGamepad)
                 LoadGamepads();
-
-            TBCore.Events.OnSystemMenu += RefreshInput;
         }
 
         protected virtual void OnDestroy()

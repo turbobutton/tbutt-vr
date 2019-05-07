@@ -14,6 +14,7 @@ namespace TButt.Settings
         {
             _displaySettings = LoadDisplaySettings(GetWindowsMRSettingsFilename(GetWindowsMixedRealityLevel()));
             _headset = VRHeadset.WindowsMR;
+            _family = VRFamily.Windows;
             base.Initialize();
         }
 

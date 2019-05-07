@@ -1,0 +1,317 @@
+{
+   "alias_info" : {},
+   
+   "bindings" : {
+      "/actions/buggy" : {
+         "chords" : [],
+         "haptics" : [],
+         "poses" : [],
+         "skeleton" : [],
+         "sources" : []
+      },
+      "/actions/default" : {
+         "chords" : [],
+         "haptics" : [],
+         "poses" : [],
+         "skeleton" : [],
+         "sources" : []
+      },
+      "/actions/platformer" : {
+         "chords" : [],
+         "haptics" : [],
+         "poses" : [],
+         "skeleton" : [],
+         "sources" : []
+      },
+      "/actions/tbutt" : {
+         "chords" : [],
+         "haptics" : [
+            {
+               "output" : "/actions/tbutt/out/haptic",
+               "path" : "/user/hand/left/output/haptic"
+            },
+            {
+               "output" : "/actions/tbutt/out/haptic",
+               "path" : "/user/hand/right/output/haptic"
+            }
+         ],
+         "poses" : [
+            {
+               "output" : "/actions/tbutt/in/pose",
+               "path" : "/user/hand/left/pose/tip"
+            },
+            {
+               "output" : "/actions/tbutt/in/pose",
+               "path" : "/user/hand/right/pose/tip"
+            }
+         ],
+         "skeleton" : [
+            {
+               "output" : "/actions/tbutt/in/skeletonrighthand",
+               "path" : "/user/hand/left/input/skeleton/right"
+            },
+            {
+               "output" : "/actions/tbutt/in/skeletonrighthand",
+               "path" : "/user/hand/right/input/skeleton/right"
+            },
+            {
+               "output" : "/actions/tbutt/in/skeletonlefthand",
+               "path" : "/user/hand/left/input/skeleton/left"
+            }
+         ],
+         "sources" : [
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tbutt/in/maintrigger_click"
+                  },
+                  "pull" : {
+                     "output" : "/actions/tbutt/in/maintrigger_v1"
+                  },
+                  "touch" : {
+                     "output" : "/actions/tbutt/in/maintrigger_touch"
+                  }
+               },
+               "mode" : "trigger",
+               "path" : "/user/hand/left/input/trigger"
+            },
+            {
+               "inputs" : {
+                  "position" : {
+                     "output" : "/actions/tbutt/in/joystick1_v2"
+                  },
+                  "touch" : {
+                     "output" : "/actions/tbutt/in/joystick1_touch"
+                  }
+               },
+               "mode" : "trackpad",
+               "path" : "/user/hand/left/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tbutt/in/joystick1_button"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tbutt/in/joystick2_button"
+                  },
+                  "position" : {
+                     "output" : "/actions/tbutt/in/joystick2_v2"
+                  },
+                  "touch" : {
+                     "output" : "/actions/tbutt/in/joystick2_touch"
+                  }
+               },
+               "mode" : "joystick",
+               "path" : "/user/hand/left/input/thumbstick"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tbutt/in/by_button"
+                  },
+                  "touch" : {
+                     "output" : "/actions/tbutt/in/by_touch"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/b"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tbutt/in/ax_button"
+                  },
+                  "touch" : {
+                     "output" : "/actions/tbutt/in/ax_touch"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/a"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tbutt/in/ax_button"
+                  },
+                  "touch" : {
+                     "output" : "/actions/tbutt/in/ax_touch"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/a"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tbutt/in/by_button"
+                  },
+                  "touch" : {
+                     "output" : "/actions/tbutt/in/by_touch"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/b"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tbutt/in/joystick2_button"
+                  },
+                  "position" : {
+                     "output" : "/actions/tbutt/in/joystick2_v2"
+                  },
+                  "touch" : {
+                     "output" : "/actions/tbutt/in/joystick2_touch"
+                  }
+               },
+               "mode" : "joystick",
+               "path" : "/user/hand/right/input/thumbstick"
+            },
+            {
+               "inputs" : {
+                  "position" : {
+                     "output" : "/actions/tbutt/in/joystick1_v2"
+                  },
+                  "touch" : {
+                     "output" : "/actions/tbutt/in/joystick1_touch"
+                  }
+               },
+               "mode" : "trackpad",
+               "path" : "/user/hand/right/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tbutt/in/joystick1_button"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/trackpad"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tbutt/in/maintrigger_click"
+                  },
+                  "pull" : {
+                     "output" : "/actions/tbutt/in/maintrigger_v1"
+                  },
+                  "touch" : {
+                     "output" : "/actions/tbutt/in/maintrigger_touch"
+                  }
+               },
+               "mode" : "trigger",
+               "path" : "/user/hand/right/input/trigger"
+            },
+            {
+               "inputs" : {
+                  "pull" : {
+                     "output" : "/actions/tbutt/in/grip_v1"
+                  },
+                  "touch" : {
+                     "output" : "/actions/tbutt/in/grip_touch"
+                  }
+               },
+               "mode" : "trigger",
+               "path" : "/user/hand/left/input/grip"
+            },
+            {
+               "inputs" : {
+                  "pull" : {
+                     "output" : "/actions/tbutt/in/grip_v1"
+                  },
+                  "touch" : {
+                     "output" : "/actions/tbutt/in/grip_touch"
+                  }
+               },
+               "mode" : "trigger",
+               "path" : "/user/hand/right/input/grip"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tbutt/in/grip_button"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/grip"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tbutt/in/grip_button"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/grip"
+            },
+            {
+               "inputs" : {
+                  "force" : {
+                     "output" : "/actions/tbutt/in/squeeze_v1"
+                  }
+               },
+               "mode" : "force_sensor",
+               "path" : "/user/hand/left/input/grip"
+            },
+            {
+               "inputs" : {
+                  "force" : {
+                     "output" : "/actions/tbutt/in/squeeze_v1"
+                  }
+               },
+               "mode" : "force_sensor",
+               "path" : "/user/hand/right/input/grip"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tbutt/in/maintrigger_button"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/trigger"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/tbutt/in/maintrigger_button"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/right/input/trigger"
+            },
+            {
+               "inputs" : {
+                  "grab" : {
+                     "output" : "/actions/tbutt/in/squeeze_button"
+                  }
+               },
+               "mode" : "grab",
+               "path" : "/user/hand/left/input/grip"
+            },
+            {
+               "inputs" : {
+                  "grab" : {
+                     "output" : "/actions/tbutt/in/squeeze_button"
+                  }
+               },
+               "mode" : "grab",
+               "path" : "/user/hand/right/input/grip"
+            }
+         ]
+      }
+   },
+   "controller_type" : "knuckles",
+   "description" : "",
+   "name" : "knuckles_tbutt",
+   "options" : {},
+   "simulated_actions" : []
+}

@@ -55,8 +55,15 @@ namespace TButt.Input
                 supportsAxis2D = false
             });
 
+            _instance.SetFingerPoseButtons();
             lookupTable = TBInput.NewLookupTableFromDefs(loadedButtonDefs);
             loaded = true;
+        }
+
+        protected override void SetFingerPoseButtons()
+        {
+            _instance.thumbPoseButtons = new OVRInput.RawButton[] { OVRInput.RawButton.LTouchpad, OVRInput.RawButton.RTouchpad };
+            _instance.indexPoseButtons = new OVRInput.RawButton[] { OVRInput.RawButton.LIndexTrigger, OVRInput.RawButton.RIndexTrigger };
         }
 
         public override List<TBInput.ButtonDef<OVRInput.RawButton>> GetDefaultDefs()
@@ -78,19 +85,6 @@ namespace TButt.Input
                     virtualButtons = new TBInput.Button[] { TBInput.Button.Options },
                     name = "Back"}
             };
-        }
-
-        public override OVRInput.RawButton[] GetFingerButtons(TBInput.Finger finger)
-        {
-            switch (finger)
-            {
-                case TBInput.Finger.Thumb:
-                    return new OVRInput.RawButton[] { OVRInput.RawButton.LTouchpad, OVRInput.RawButton.RTouchpad };
-                case TBInput.Finger.Index:
-                    return new OVRInput.RawButton[] { OVRInput.RawButton.LIndexTrigger, OVRInput.RawButton.RIndexTrigger };
-                default:
-                    return null;
-            }
         }
 
         public override VRController GetModel()

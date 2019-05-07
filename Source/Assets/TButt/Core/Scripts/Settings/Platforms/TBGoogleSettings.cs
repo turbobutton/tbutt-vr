@@ -12,6 +12,7 @@ namespace TButt.Settings
         {
             _displaySettings = LoadDisplaySettings(settingsFilename);
             _headset = VRHeadset.Daydream;
+            _family = VRFamily.Google;
 
 #if TB_GOOGLE
             if (GvrHeadset.SupportsPositionalTracking)

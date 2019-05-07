@@ -40,6 +40,7 @@ namespace TButt.Input
             switch(TBCore.GetActiveHeadset())
             {
                 case VRHeadset.OculusRift:
+                case VRHeadset.OculusRiftS:
                     controller_LHand = TBController_SteamVR_OculusTouchLeft.instance;
                     controller_RHand = TBController_SteamVR_OculusTouchRight.instance;
                     break;
@@ -48,8 +49,16 @@ namespace TButt.Input
                     controller_RHand = TBController_SteamVR_WindowsMixedRealityRight.instance;
                     break;
                 default:
-                    controller_LHand = TBController_SteamVR_ViveControllerLeft.instance;
-                    controller_RHand = TBController_SteamVR_ViveControllerRight.instance;
+                    if (TBCore.GetActiveHeadsetFamily() == VRFamily.Oculus)
+                    {
+                        controller_LHand = TBController_SteamVR_OculusTouchLeft.instance;
+                        controller_RHand = TBController_SteamVR_OculusTouchRight.instance;
+                    }
+                    else
+                    {
+                        controller_LHand = TBController_SteamVR_ViveControllerLeft.instance;
+                        controller_RHand = TBController_SteamVR_ViveControllerRight.instance;
+                    }
                     break;
             }
         }
@@ -61,12 +70,12 @@ namespace TButt.Input
             {
                 if (TBSettings.GetControlSettings().handedness3DOF == TBSettings.TBHardwareHandedness.Left)
                 {
-                    switch (TBCore.GetActiveHeadset())
+                    switch (TBCore.GetActiveHeadsetFamily())
                     {
-                        case VRHeadset.OculusRift:
+                        case VRFamily.Oculus:
                             controller_3DOF = TBController_SteamVR_OculusTouchLeft.instance;
                             break;
-                        case VRHeadset.WindowsMR:
+                        case VRFamily.Windows:
                             controller_3DOF = TBController_SteamVR_WindowsMixedRealityLeft.instance;
                             break;
                         default:
@@ -76,12 +85,12 @@ namespace TButt.Input
                 }
                 else
                 {
-                    switch (TBCore.GetActiveHeadset())
+                    switch (TBCore.GetActiveHeadsetFamily())
                     {
-                        case VRHeadset.OculusRift:
+                        case VRFamily.Oculus:
                             controller_3DOF = TBController_SteamVR_OculusTouchRight.instance;
                             break;
-                        case VRHeadset.WindowsMR:
+                        case VRFamily.Windows:
                             controller_3DOF = TBController_SteamVR_WindowsMixedRealityRight.instance;
                             break;
                         default:
@@ -115,7 +124,7 @@ namespace TButt.Input
             return true;
         }
 
-                #region INPUT CHECKS
+        #region INPUT CHECKS
         public override bool ResolveButtonDown(EVRButtonId button, TBInput.Controller controller)
         {
             uint id = GetSteamVRControllerID(controller);
@@ -272,9 +281,9 @@ namespace TButt.Input
             }
             return accel;
         }
-                #endregion
+        #endregion
 
-                #region DEFAULT BUTTON DEFS
+        #region DEFAULT BUTTON DEFS
         public static List<TBInput.ButtonDef<EVRButtonId>> GetDefaultViveDefs()
         {
             return new List<TBInput.ButtonDef<EVRButtonId>>
@@ -316,7 +325,7 @@ namespace TButt.Input
                     name = "Touchpad Down" }
             };
         }
-                #endregion
+        #endregion
 #endif
-            }
-        }
+    }
+}

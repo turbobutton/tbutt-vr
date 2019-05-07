@@ -1,25 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-#if TB_STEAM_VR
-using Valve.VR;
+#if TB_STEAM_VR_2
 
 namespace TButt.Input
 {
-    public class TBController_SteamVR_OculusTouchLeft: TBControllerBase<EVRButtonId>
+    public class TBController_SteamVR2_OculusTouch_Left: TBControllerBase<SteamVRHardwareButton>
     {
-        protected static TBController_SteamVR_OculusTouchLeft _instance;
+        protected static TBController_SteamVR2_OculusTouch_Left _instance;
 
-        public static TBController_SteamVR_OculusTouchLeft instance
+        public static TBController_SteamVR2_OculusTouch_Left instance
         {
             get
             {
                 if (_instance == null)
                 {
-                    _instance = new TBController_SteamVR_OculusTouchLeft();
+                    _instance = new TBController_SteamVR2_OculusTouch_Left();
                     _instance.name = "Oculus Touch (Left)";
                     _instance.fileName = "Maps_SteamVR_OculusTouchLeft";
-                    _instance.model = VRController.OculusTouch;
+                    if(TBCore.GetActiveHeadset() == VRHeadset.OculusRift)
+                        _instance.model = VRController.OculusTouchV1;
+                    else
+                        _instance.model = VRController.OculusTouchV2;
                     _instance.supportsRumble = true;
                     _instance.type = TBInput.Controller.LHandController;
                     _instance.Initialize();
@@ -28,34 +30,42 @@ namespace TButt.Input
             }
         }
 
-        public override List<TBInput.ButtonDef<EVRButtonId>> GetDefaultDefs()
+        protected override void SetFingerPoseButtons()
         {
-            return new List<TBInput.ButtonDef<EVRButtonId>>
+            _instance.thumbPoseButtons = new SteamVRHardwareButton[] { SteamVRHardwareButton.Joystick, SteamVRHardwareButton.AX, SteamVRHardwareButton.BY };
+            _instance.indexPoseButtons = new SteamVRHardwareButton[] { SteamVRHardwareButton.PrimaryTrigger };
+            _instance.gripPoseButtons = new SteamVRHardwareButton[] { SteamVRHardwareButton.Grip };
+        }
+
+
+        public override List<TBInput.ButtonDef<SteamVRHardwareButton>> GetDefaultDefs()
+        {
+            return new List<TBInput.ButtonDef<SteamVRHardwareButton>>
             {
-                new TBInput.ButtonDef<EVRButtonId>() {
-                    rawButton = EVRButtonId.k_EButton_A,
+                new TBInput.ButtonDef<SteamVRHardwareButton>() {
+                    rawButton = SteamVRHardwareButton.AX,
                     virtualButtons = new TBInput.Button[] { TBInput.Button.Action1 },
                     name = "X Button",
                     supportsTouch = true },
-                new TBInput.ButtonDef<EVRButtonId>() {
-                    rawButton = EVRButtonId.k_EButton_ApplicationMenu,
+                new TBInput.ButtonDef<SteamVRHardwareButton>() {
+                    rawButton = SteamVRHardwareButton.BY,
                     virtualButtons = new TBInput.Button[] { TBInput.Button.Action2, TBInput.Button.Options },
                     name = "Y Button",
                     supportsTouch = true },
-                new TBInput.ButtonDef<EVRButtonId>() {
-                    rawButton = EVRButtonId.k_EButton_SteamVR_Touchpad,
+                new TBInput.ButtonDef<SteamVRHardwareButton>() {
+                    rawButton = SteamVRHardwareButton.Joystick,
                     virtualButtons = new TBInput.Button[] { TBInput.Button.Joystick, TBInput.Button.Touchpad },
                     name = "Joystick",
                     supportsTouch = true,
                     supportsAxis2D = true },
-                new TBInput.ButtonDef<EVRButtonId>() {
-                    rawButton = EVRButtonId.k_EButton_SteamVR_Trigger,
+                new TBInput.ButtonDef<SteamVRHardwareButton>() {
+                    rawButton = SteamVRHardwareButton.PrimaryTrigger,
                     virtualButtons = new TBInput.Button[] { TBInput.Button.PrimaryTrigger },
                     name = "Index Trigger",
                     supportsAxis1D = true,
                     supportsTouch = true },
-                new TBInput.ButtonDef<EVRButtonId>() {
-                    rawButton = EVRButtonId.k_EButton_Grip,
+                new TBInput.ButtonDef<SteamVRHardwareButton>() {
+                    rawButton = SteamVRHardwareButton.Grip,
                     virtualButtons = new TBInput.Button[] { TBInput.Button.SecondaryTrigger },
                     name = "Hand Trigger",
                     supportsAxis1D = true }
@@ -67,24 +77,8 @@ namespace TButt.Input
 			HandTrackingOffsets newTrackingOffsets = new HandTrackingOffsets ();
 			newTrackingOffsets.positionOffset = new Vector3 (-0.03f, -0.08f, -0.1f);
 			newTrackingOffsets.rotationOffset = Vector3.right * 30f;
-
 			return newTrackingOffsets;
 		}
-
-        public override EVRButtonId[] GetFingerButtons(TBInput.Finger finger)
-        {
-            switch (finger)
-            {
-                case TBInput.Finger.Thumb:
-                    return new EVRButtonId[] { EVRButtonId.k_EButton_SteamVR_Touchpad, EVRButtonId.k_EButton_A };
-                case TBInput.Finger.Index:
-                    return new EVRButtonId[] { EVRButtonId.k_EButton_SteamVR_Trigger };
-                case TBInput.Finger.Grip:
-                    return new EVRButtonId[] { EVRButtonId.k_EButton_Grip };
-                default:
-                    return null;
-            }
-        }
     }
 }
 #endif

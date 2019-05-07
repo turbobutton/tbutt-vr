@@ -11,6 +11,7 @@ namespace TButt.Settings
     {
         protected TBSettings.TBDisplaySettings _displaySettings;
         protected VRHeadset _headset = VRHeadset.None;
+        protected VRFamily _family = VRFamily.Unknown;
 
         public virtual void Initialize()
         {
@@ -98,6 +99,11 @@ namespace TButt.Settings
         public virtual VRHeadset GetActiveHeadset()
         {
             return _headset;
+        }
+
+        public virtual VRFamily GetActiveFamily()
+        {
+            return _family;
         }
 
         /// <summary>

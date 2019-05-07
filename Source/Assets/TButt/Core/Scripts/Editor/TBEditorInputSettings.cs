@@ -169,6 +169,7 @@ namespace TButt.Editor
 
             ShowControllerMatrixHeader(TBEditorSDKSettings.GetActiveSDKs().oculus, VRPlatform.OculusPC, TBEditorStyles.sectionOverlayOculus);
             ShowControllerMatrixHeader(TBEditorSDKSettings.GetActiveSDKs().steamVR, VRPlatform.SteamVR, TBEditorStyles.sectionOverlaySteam);
+            ShowControllerMatrixHeader(TBEditorSDKSettings.GetActiveSDKs().steamVR2, VRPlatform.SteamVR, TBEditorStyles.sectionOverlaySteam);
             ShowControllerMatrixHeader(TBEditorSDKSettings.GetActiveSDKs().googleVR, VRPlatform.Daydream, TBEditorStyles.sectionOverlayGoogle);
             ShowControllerMatrixHeader(TBEditorSDKSettings.GetActiveSDKs().psvr, VRPlatform.PlayStationVR, TBEditorStyles.sectionOverlayPSVR);
             ShowControllerMatrixHeader(TBEditorSDKSettings.GetActiveSDKs().windows, VRPlatform.WindowsMR, TBEditorStyles.sectionOverlayWindows);
@@ -244,6 +245,15 @@ namespace TButt.Editor
                 EditorGUILayout.EndVertical();
             }
 
+            if (TBEditorSDKSettings.GetActiveSDKs().steamVR2)
+            {
+                EditorGUILayout.BeginVertical(TBEditorStyles.sectionOverlaySteam, new GUILayoutOption[2] { GUILayout.Width(controllerColumnWidth), GUILayout.ExpandHeight(true) });
+                GUI.backgroundColor = TBEditorStyles.solidSteam;
+                TBEditorInputSteamVR2.ShowSteamVRControllerList(active, controlType);
+                GUI.backgroundColor = Color.white;
+                EditorGUILayout.EndVertical();
+            }
+
             if (TBEditorSDKSettings.GetActiveSDKs().googleVR)
             {
                 EditorGUILayout.BeginVertical(TBEditorStyles.sectionOverlayGoogle, new GUILayoutOption[2] { GUILayout.Width(controllerColumnWidth), GUILayout.ExpandHeight(true) });
@@ -257,7 +267,7 @@ namespace TButt.Editor
             {
                 EditorGUILayout.BeginVertical(TBEditorStyles.sectionOverlayPSVR, new GUILayoutOption[2] { GUILayout.Width(controllerColumnWidth), GUILayout.ExpandHeight(true) });
                 GUI.backgroundColor = TBEditorStyles.solidPSVR;
-#if UNITY_PS4
+#if TB_HAS_UNITY_PS4
                 TBEditorInputPSVR.ShowPSVRControllerList(active, controlType);
 #else
                 EditorGUILayout.HelpBox("PSVR settings are only available when Unity platform is set to PS4 and the PS4 module is installed.", MessageType.Info);
@@ -421,6 +431,9 @@ namespace TButt.Editor
 #endif
 #if TB_STEAM_VR
             SaveNewButtonMapsForSDK<Valve.VR.EVRButtonId>(TBEditorInputSteamVR.controllers);
+#endif
+#if TB_STEAM_VR_2
+            SaveNewButtonMapsForSDK<SteamVRHardwareButton>(TBEditorInputSteamVR2.controllers);
 #endif
 #if TB_GOOGLE
             SaveNewButtonMapsForSDK<GvrControllerButton>(TBEditorInputGoogle.controllers);

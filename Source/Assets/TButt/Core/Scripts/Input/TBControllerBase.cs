@@ -18,6 +18,10 @@ namespace TButt.Input
         protected TBInput.ButtonLookupTable<T> lookupTable;
         protected HandTrackingOffsets trackingOffsets;
 
+        protected T[] thumbPoseButtons;
+        protected T[] indexPoseButtons;
+        protected T[] gripPoseButtons;
+
         public virtual List<TBInput.ButtonDef<T>> GetDefaultDefs()
         {
             return new List<TBInput.ButtonDef<T>>();
@@ -26,6 +30,7 @@ namespace TButt.Input
         protected virtual void Initialize()
         {
             trackingOffsets = GetDefaultTrackingOffsets();
+            SetFingerPoseButtons();
             loadedButtonDefs = TBInput.LoadButtonDefs<T>(GetDefaultDefs(), fileName);
             lookupTable = TBInput.NewLookupTableFromDefs<T>(loadedButtonDefs);
             loaded = true;
@@ -76,9 +81,24 @@ namespace TButt.Input
             return trackingOffsets;
         }
 
+        protected virtual void SetFingerPoseButtons()
+        {
+            return;
+        }
+
         public virtual T[] GetFingerButtons(TBInput.Finger finger)
         {
-            return null;
+            switch (finger)
+            {
+                case TBInput.Finger.Thumb:
+                    return thumbPoseButtons;
+                case TBInput.Finger.Index:
+                    return indexPoseButtons;
+                case TBInput.Finger.Grip:
+                    return gripPoseButtons;
+                default:
+                    return null;
+            }
         }
 
         protected virtual HandTrackingOffsets GetDefaultTrackingOffsets()

@@ -325,6 +325,10 @@ namespace TButt.Input
                     return OVRInput.RawTouch.LTouchpad;
                 case OVRInput.RawButton.RTouchpad:
                     return OVRInput.RawTouch.RTouchpad;
+                case OVRInput.RawButton.RShoulder:
+                    return OVRInput.RawTouch.RThumbRest;
+                case OVRInput.RawButton.LShoulder:
+                    return OVRInput.RawTouch.LThumbRest;
             }
             return OVRInput.RawTouch.None;
         }

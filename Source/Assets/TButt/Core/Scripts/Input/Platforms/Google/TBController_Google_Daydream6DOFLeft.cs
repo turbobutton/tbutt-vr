@@ -27,6 +27,11 @@ namespace TButt.Input
                 return _instance;
             }
         }
+        protected override void SetFingerPoseButtons()
+        {
+            _instance.thumbPoseButtons = new GvrControllerButton[] { GvrControllerButton.TouchPadButton };
+            _instance.indexPoseButtons = new GvrControllerButton[] { GvrControllerButton.Trigger };
+        }
 
         public override List<TBInput.ButtonDef<GvrControllerButton>> GetDefaultDefs()
         {
@@ -55,19 +60,6 @@ namespace TButt.Input
                     virtualButtons = new TBInput.Button[] { TBInput.Button.Options, TBInput.Button.Action2 },
                     name = "App Button"}
             };
-        }
-
-        public override GvrControllerButton[] GetFingerButtons(TBInput.Finger finger)
-        {
-            switch (finger)
-            {
-                case TBInput.Finger.Thumb:
-                    return new GvrControllerButton[] { GvrControllerButton.TouchPadButton };
-                case TBInput.Finger.Index:
-                    return new GvrControllerButton[] { GvrControllerButton.Trigger };
-                default:
-                    return null;
-            }
         }
     }
 }

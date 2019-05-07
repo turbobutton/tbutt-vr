@@ -185,6 +185,19 @@ namespace TButt
             }
         }
 
+        public static VRFamily GetHeadsetFamily()
+        {
+            if (_settingsBase != null)
+            {
+                return _settingsBase.GetActiveFamily();
+            }
+            else
+            {
+                TBLogging.LogWarning("Attempted to read active headset's family before it was initialized.");
+                return VRFamily.Unknown;
+            }
+        }
+
         #endregion
 
         [Conditional("TB_ENABLE_LOGS")]
@@ -421,6 +434,17 @@ namespace TButt
         PSVR = 1000
     }
 
+    public enum VRFamily
+    {
+        Unknown = 0,
+        Oculus = 1,
+        HTC = 2,
+        Valve = 3,
+        Sony = 4,
+        Windows = 5,
+        Google = 6
+    }
+
     public enum VRController
     {
         None = 0,
@@ -439,9 +463,10 @@ namespace TButt
         GearVRTouchpad            = 7,
 
         // Steam VR
-        ViveController = 200,
-        XInputGamepad       = 201,
-        
+        ViveController          = 200,
+        XInputGamepad           = 201,
+        ValveIndexController    = 202,
+
         // Windows Mixed Reality
         WMRController       = 400,
 

@@ -1,0 +1,250 @@
+{
+  
+  "bindings": {
+    "/actions/buggy": {
+      "chords": [],
+      "poses": [],
+      "haptics": [],
+      "sources": [],
+      "skeleton": []
+    },
+    "/actions/default": {
+      "chords": [],
+      "poses": [],
+      "haptics": [],
+      "sources": [],
+      "skeleton": []
+    },
+    "/actions/platformer": {
+      "chords": [],
+      "poses": [],
+      "haptics": [],
+      "sources": [],
+      "skeleton": []
+    },
+    "/actions/tbutt": {
+      "chords": [],
+      "poses": [
+        {
+          "output": "/actions/tbutt/in/pose",
+          "path": "/user/hand/left/pose/raw"
+        },
+        {
+          "output": "/actions/tbutt/in/pose",
+          "path": "/user/hand/right/pose/raw"
+        }
+      ],
+      "haptics": [
+        {
+          "output": "/actions/tbutt/out/haptic",
+          "path": "/user/hand/left/output/haptic"
+        },
+        {
+          "output": "/actions/tbutt/out/haptic",
+          "path": "/user/hand/right/output/haptic"
+        }
+      ],
+      "sources": [
+        {
+          "path": "/user/hand/left/input/trigger",
+          "mode": "trigger",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/tbutt/in/maintrigger_button"
+            },
+            "pull": {
+              "output": "/actions/tbutt/in/maintrigger_v1"
+            },
+            "touch": {
+              "output": "/actions/tbutt/in/maintrigger_touch"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/joystick",
+          "mode": "joystick",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/tbutt/in/joystick2_button"
+            },
+            "position": {
+              "output": "/actions/tbutt/in/joystick2_v2"
+            },
+            "touch": {
+              "output": "/actions/tbutt/in/joystick2_touch"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/grip",
+          "mode": "trigger",
+          "parameters": {},
+          "inputs": {
+            "pull": {
+              "output": "/actions/tbutt/in/grip_v1"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/grip",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/tbutt/in/grip_button"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/x",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/tbutt/in/ax_button"
+            },
+            "touch": {
+              "output": "/actions/tbutt/in/ax_touch"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/left/input/y",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/tbutt/in/by_button"
+            },
+            "touch": {
+              "output": "/actions/tbutt/in/by_touch"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/grip",
+          "mode": "trigger",
+          "parameters": {},
+          "inputs": {
+            "pull": {
+              "output": "/actions/tbutt/in/grip_v1"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/grip",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/tbutt/in/grip_button"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/joystick",
+          "mode": "joystick",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/tbutt/in/joystick2_button"
+            },
+            "position": {
+              "output": "/actions/tbutt/in/joystick2_v2"
+            },
+            "touch": {
+              "output": "/actions/tbutt/in/joystick2_touch"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/trigger",
+          "mode": "trigger",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/tbutt/in/maintrigger_button"
+            },
+            "pull": {
+              "output": "/actions/tbutt/in/maintrigger_v1"
+            },
+            "touch": {
+              "output": "/actions/tbutt/in/maintrigger_touch"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/x",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/tbutt/in/ax_button"
+            },
+            "touch": {
+              "output": "/actions/tbutt/in/ax_touch"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/y",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/tbutt/in/by_button"
+            },
+            "touch": {
+              "output": "/actions/tbutt/in/by_touch"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/a",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/tbutt/in/ax_button"
+            },
+            "touch": {
+              "output": "/actions/tbutt/in/ax_touch"
+            }
+          }
+        },
+        {
+          "path": "/user/hand/right/input/b",
+          "mode": "button",
+          "parameters": {},
+          "inputs": {
+            "click": {
+              "output": "/actions/tbutt/in/by_button"
+            },
+            "touch": {
+              "output": "/actions/tbutt/in/by_touch"
+            }
+          }
+        }
+      ],
+      "skeleton": [
+        {
+          "output": "/actions/tbutt/in/skeletonrighthand",
+          "path": "/user/hand/left/input/skeleton/right"
+        },
+        {
+          "output": "/actions/tbutt/in/skeletonrighthand",
+          "path": "/user/hand/right/input/skeleton/right"
+        },
+        {
+          "output": "/actions/tbutt/in/skeletonlefthand",
+          "path": "/user/hand/left/input/skeleton/left"
+        }
+      ]
+    }
+  },
+  "controller_type": "oculus_touch",
+  "description": "",
+  "name": "oculus_touch_tbutt"
+}

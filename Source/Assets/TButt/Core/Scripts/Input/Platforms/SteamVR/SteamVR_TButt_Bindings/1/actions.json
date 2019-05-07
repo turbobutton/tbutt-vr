@@ -1,0 +1,180 @@
+{
+  "actions": [
+    {
+      "name": "/actions/TButt/in/Grip_V1",
+      "type": "vector1",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/Grip_Button",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/TButt/in/Grip_Touch",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/TButt/in/MainTrigger_V1",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/TButt/in/MainTrigger_Button",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/TButt/in/MainTrigger_Touch",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/TButt/in/MainTrigger_Click",
+      "type": "boolean"
+    },
+    {
+      "name": "/actions/TButt/in/Joystick1_V2",
+      "type": "vector2",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/Joystick1_Touch",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/Joystick1_Button",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/Joystick2_V2",
+      "type": "vector2",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/Joystick2_Touch",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/Joystick2_Button",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/AX_Button",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/AX_Touch",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/BY_Button",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/BY_Touch",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/Menu_Touch",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/Menu_Button",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/Squeeze_Button",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/Squeeze_V1",
+      "type": "vector1",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/Pose",
+      "type": "pose"
+    },
+    {
+      "name": "/actions/TButt/in/SkeletonLeftHand",
+      "type": "skeleton",
+      "skeleton": "/skeleton/hand/left"
+    },
+    {
+      "name": "/actions/TButt/in/SkeletonRightHand",
+      "type": "skeleton",
+      "skeleton": "/skeleton/hand/right"
+    },
+    {
+      "name": "/actions/TButt/in/HeadsetOnHead",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/in/ID_IndexController",
+      "type": "boolean",
+      "requirement": "optional"
+    },
+    {
+      "name": "/actions/TButt/out/Haptic",
+      "type": "vibration"
+    }
+  ],
+  "action_sets": [
+    {
+      "name": "/actions/TButt",
+      "usage": "single"
+    }
+  ],
+  "default_bindings": [
+    {
+      "controller_type": "vive_controller",
+      "binding_url": "bindings_vive_controller.json"
+    },
+    {
+      "controller_type": "oculus_touch",
+      "binding_url": "bindings_oculus_touch.json"
+    },
+    {
+      "controller_type": "knuckles",
+      "binding_url": "bindings_knuckles.json"
+    },
+    {
+      "controller_type": "holographic_controller",
+      "binding_url": "bindings_holographic_controller.json"
+    },
+    {
+      "controller_type": "vive",
+      "binding_url": "binding_vive.json"
+    },
+    {
+      "controller_type": "vive_pro",
+      "binding_url": "binding_vive_pro.json"
+    },
+    {
+      "controller_type": "rift",
+      "binding_url": "binding_rift.json"
+    },
+    {
+      "controller_type": "holographic_hmd",
+      "binding_url": "binding_holographic_hmd.json"
+    },
+    {
+      "controller_type": "vive_tracker_camera",
+      "binding_url": "binding_vive_tracker_camera.json"
+    }
+  ],
+  "localization": [
+    {
+      "language_tag": "en_US"
+    }
+  ]
+}

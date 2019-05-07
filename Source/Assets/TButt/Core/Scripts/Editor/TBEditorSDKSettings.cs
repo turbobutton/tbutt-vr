@@ -16,7 +16,7 @@ namespace TButt.Editor
         public int toolbar;
         string selectedSDKName;
 
-        public TBEditorSDKSettingsBase _sdkSettings;
+        static TBEditorSDKSettingsBase _sdkSettings;
 
         static Texture[] toolbarImages;
         static Texture crossImage;
@@ -29,7 +29,7 @@ namespace TButt.Editor
         static TBSettings.TBCameraSettings camSettings;
 
         // SDK settings
-        static SDKs editorSDKs;
+        public static SDKs editorSDKs;
         static Dictionary<string, TBEditorSDKSettingsBase> sdkSettings;
 
         [MenuItem("TButt/Core Settings...", false, 10000)]
@@ -89,7 +89,7 @@ namespace TButt.Editor
             GUILayout.Toolbar(10,
                 new Texture[] {null,
                     editorSDKs.oculus ? checkImage : crossImage,
-                    editorSDKs.steamVR ? checkImage : crossImage,
+                    (editorSDKs.steamVR || editorSDKs.steamVR2) ? checkImage : crossImage,
                     editorSDKs.googleVR ? checkImage : crossImage,
                     editorSDKs.windows ? checkImage : crossImage
                     #if TB_HAS_UNITY_PS4
@@ -213,7 +213,7 @@ namespace TButt.Editor
 
         static bool AnySDKSelected()
         {
-            return ((editorSDKs.googleVR || editorSDKs.oculus || editorSDKs.steamVR || editorSDKs.windows));
+            return ((editorSDKs.googleVR || editorSDKs.oculus || editorSDKs.steamVR || editorSDKs.steamVR2 || editorSDKs.windows));
         }
 
 #region SDK CHECKS
@@ -272,6 +272,7 @@ namespace TButt.Editor
             TBEditorDefines.SetPlatformDefine(TBEditorDefines.logsDef, sdks.logs);
             TBEditorDefines.SetPlatformDefine(TBEditorDefines.oculusDef, sdks.oculus);
             TBEditorDefines.SetPlatformDefine(TBEditorDefines.steamVRDef, sdks.steamVR);
+            TBEditorDefines.SetPlatformDefine(TBEditorDefines.steamVR2Def, sdks.steamVR2);
             TBEditorDefines.SetPlatformDefine(TBEditorDefines.googleDef, sdks.googleVR);
             #if TB_HAS_UNITY_PS4
             TBEditorDefines.SetPlatformDefine(TBEditorDefines.psvrDef, sdks.psvr);
@@ -339,6 +340,8 @@ namespace TButt.Editor
                 i++;
             if (editorSDKs.steamVR)
                 i++;
+            if (editorSDKs.steamVR2)
+                i++;
             if (editorSDKs.windows)
                 i++;
 
@@ -353,6 +356,7 @@ namespace TButt.Editor
             editorSDKs.oculus = false;
             editorSDKs.googleVR = false;
             editorSDKs.steamVR = false;
+            editorSDKs.steamVR2 = false;
             editorSDKs.psvr = false;
             editorSDKs.windows = false;
 
@@ -361,6 +365,9 @@ namespace TButt.Editor
 #endif
 #if TB_STEAM_VR
             editorSDKs.steamVR = true;
+#endif
+#if TB_STEAM_VR_2
+            editorSDKs.steamVR2 = true;
 #endif
 #if TB_GOOGLE
             editorSDKs.googleVR = true;
@@ -383,6 +390,7 @@ namespace TButt.Editor
             public bool windows;
             public bool logs;
             public bool forceSync;
+            public bool steamVR2;
         }
     }
 }

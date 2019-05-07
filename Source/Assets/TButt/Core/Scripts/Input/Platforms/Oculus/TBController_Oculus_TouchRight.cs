@@ -36,6 +36,16 @@ namespace TButt.Input
             }
         }
 
+        protected override void SetFingerPoseButtons()
+        {
+            if (_instance.model == VRController.OculusTouchV1)
+                _instance.thumbPoseButtons = new OVRInput.RawButton[] { OVRInput.RawButton.A, OVRInput.RawButton.B, OVRInput.RawButton.RThumbstick, OVRInput.RawButton.RShoulder };
+            else
+                _instance.thumbPoseButtons = new OVRInput.RawButton[] { OVRInput.RawButton.A, OVRInput.RawButton.B, OVRInput.RawButton.RThumbstick };
+            _instance.indexPoseButtons = new OVRInput.RawButton[] { OVRInput.RawButton.RIndexTrigger };
+            _instance.gripPoseButtons = new OVRInput.RawButton[] { OVRInput.RawButton.RHandTrigger };
+        }
+
         public override List<TBInput.ButtonDef<OVRInput.RawButton>> GetDefaultDefs()
         {
             return new List<TBInput.ButtonDef<OVRInput.RawButton>>
@@ -79,21 +89,6 @@ namespace TButt.Input
 
 			return newTrackingOffsets;
 		}
-
-        public override OVRInput.RawButton[] GetFingerButtons(TBInput.Finger finger)
-        {
-            switch (finger)
-            {
-                case TBInput.Finger.Thumb:
-                    return new OVRInput.RawButton[] { OVRInput.RawButton.A, OVRInput.RawButton.RThumbstick };
-                case TBInput.Finger.Index:
-                    return new OVRInput.RawButton[] { OVRInput.RawButton.RIndexTrigger };
-                case TBInput.Finger.Grip:
-                    return new OVRInput.RawButton[] { OVRInput.RawButton.RHandTrigger };
-                default:
-                    return null;
-            }
-        }
     }
 }
 #endif

@@ -16,6 +16,7 @@ namespace TButt
         public static TBCoreEvent OnUpdate;
         public static TBCoreEvent OnFixedUpdate;
 		public static TBCoreEvent OnLateUpdate;
+        public static TBCoreEvent OnBeforeRender;
 
         void Awake()
         {
@@ -46,6 +47,15 @@ namespace TButt
             }
         }
 
+        protected void OnEnable()
+        {
+            Application.onBeforeRender += BeforeRender;
+        }
+        protected void OnDisable()
+        {
+            Application.onBeforeRender -= BeforeRender;
+        }
+
         void InitializePerScene()
         {
             if (GetActivePlatform() == VRPlatform.None)
@@ -70,6 +80,12 @@ namespace TButt
         {
             if (OnFixedUpdate != null)
                 OnFixedUpdate();
+        }
+
+        void BeforeRender()
+        {
+            if (OnFixedUpdate != null)
+                OnBeforeRender();
         }
 
         private void OnApplicationPause(bool pause)
@@ -98,7 +114,7 @@ namespace TButt
                         _activePlatform = VRPlatform.OculusPC;
 					break;
                 case TBSettings.VRDeviceNames.SteamVR:
-                    #if !TB_STEAM_VR
+                    #if !TB_STEAM_VR && !TB_STEAM_VR_2
                     _activePlatform = VRPlatform.OculusPC;  // Allows Oculus Utilities to be used as a fallback if Steam VR plugin is not present.
                     #else
                     _activePlatform = VRPlatform.SteamVR;
@@ -215,6 +231,15 @@ namespace TButt
         public static VRHeadset GetActiveHeadset()
         {
             return TBSettings.GetActiveHeadset();
+        }
+
+        /// <summary>
+        /// Returns the family of the active headset, if one has been initialized.
+        /// </summary>
+        /// <returns></returns>
+        public static VRFamily GetActiveHeadsetFamily()
+        {
+            return TBSettings.GetHeadsetFamily();
         }
 
         /// <summary>
@@ -363,7 +388,7 @@ namespace TButt
 
             public static bool IsValidSetup()
             {
-#if TB_OCULUS || TB_STEAM_VR || TB_PSVR || TB_GOOGLE || TB_WINDOWS_MR
+#if TB_OCULUS || TB_STEAM_VR || TB_PSVR || TB_GOOGLE || TB_WINDOWS_MR || TB_STEAM_VR_2
                 return true;
 #else
                 return false;

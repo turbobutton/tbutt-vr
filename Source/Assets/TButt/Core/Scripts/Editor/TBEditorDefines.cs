@@ -9,13 +9,14 @@ namespace TButt.Editor
     {
         public static readonly string settingsPath = "Assets/Resources/";   // Location of the TButtSettings folder.
 
-        public static readonly string versionNum = "1.1.0";
+        public static readonly string versionNum = "1.1.1";
 
         // Misc
         public static string logsDef = "TB_ENABLE_LOGS";
 
         // SDKs
         public static string steamVRDef = "TB_STEAM_VR";
+        public static string steamVR2Def = "TB_STEAM_VR_2";
         public static string oculusDef = "TB_OCULUS";
         public static string googleDef = "TB_GOOGLE";
         public static string psvrDef = "TB_PSVR";
@@ -55,6 +56,10 @@ namespace TButt.Editor
                     TBLogging.LogMessage("Removing " + platform);
                     buildDefString = buildDefString.Remove(buildDefString.IndexOf(platform), platform.Length);
                 }
+                if (buildDefString.Contains(";_2")) // Hack to remove leftover TB_STEAM_VR_2 bits
+                {
+                    buildDefString = buildDefString.Remove(buildDefString.IndexOf(";_2") + 1, 2);
+                }
             }
         }
 
@@ -65,7 +70,7 @@ namespace TButt.Editor
             string[] wantedTargets = new string[] { "None" };
             // Kind of ugly, but the build platforms have to be set in a particular order for things to work properly.
             // Assume that if Oculus and Steam are both enabled, Oculus should be first in the list.
-            if (sdks.oculus && sdks.steamVR)
+            if (sdks.oculus && (sdks.steamVR || sdks.steamVR2))
                 wantedTargets = new string[] { TBSettings.VRDeviceNames.Oculus, TBSettings.VRDeviceNames.SteamVR };
             else if (sdks.oculus)
             {
@@ -74,7 +79,7 @@ namespace TButt.Editor
                 else
                     wantedTargets = new string[] { TBSettings.VRDeviceNames.Oculus };
             }
-            else if (sdks.steamVR)
+            else if (sdks.steamVR || sdks.steamVR2)
                 wantedTargets = new string[] { TBSettings.VRDeviceNames.SteamVR };
             SetPlayerSettingsSDKs(BuildTargetGroup.Standalone, wantedTargets, currentTargets);
 
@@ -107,11 +112,15 @@ namespace TButt.Editor
                     PlayerSettings.SetVirtualRealitySDKs(BuildTargetGroup.Standalone, new string[] { TBSettings.VRDeviceNames.Oculus });
                     PlayerSettings.SetVirtualRealitySDKs(BuildTargetGroup.Android, new string[] { TBSettings.VRDeviceNames.Oculus });
                     TBEditorDefines.SetPlatformDefine(steamVRDef, false);
+                    TBEditorDefines.SetPlatformDefine(steamVR2Def, false);
                     TBEditorDefines.SetPlatformDefine(oculusDef, true);
                     break;
                 case VRPlatform.SteamVR:
                     PlayerSettings.SetVirtualRealitySDKs(BuildTargetGroup.Standalone, new string[] { TBSettings.VRDeviceNames.SteamVR });
-                    TBEditorDefines.SetPlatformDefine(steamVRDef, true);
+                    if(TBSteamVREditorSDKSettings.instance.HasSDK1())
+                        TBEditorDefines.SetPlatformDefine(steamVRDef, true);
+                    else
+                        TBEditorDefines.SetPlatformDefine(steamVR2Def, true);
                     TBEditorDefines.SetPlatformDefine(oculusDef, false);
                     break;
             }
