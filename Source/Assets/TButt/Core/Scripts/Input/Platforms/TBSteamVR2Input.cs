@@ -35,13 +35,13 @@ namespace TButt.Input
         protected SteamVR_Action_Single targetVector1D;
         protected SteamVR_Action_Vector2 targetVector2D;
         protected SteamVR_Action_Pose targetPose;
+        protected float[] targetFingerCurls;
 
         public override void Initialize()
         {
             SteamVR_Input.Initialize();
             TBSteamVRActions.Refresh();
             SteamVR_Input.UpdateNonVisualActions();
-            Debug.Log(TBSteamVRActions.tButt_MainTrigger_V1.renderModelComponentName);
             TBCore.OnBeforeRender += BeforeRender;
             SteamVR_Events.DeviceConnected.AddListener(DeviceConnectedEvent);
             base.Initialize();
@@ -195,6 +195,41 @@ namespace TButt.Input
             }
 
             return false;
+        }
+
+        public override float GetFinger(TBInput.Finger finger, TBInput.Controller controller)
+        {
+            if (controller == TBInput.Controller.Active)
+                controller = GetActiveController();
+
+            if (finger != TBInput.Finger.Grip)
+            {
+                switch (controller)
+                {
+                    case TBInput.Controller.RHandController:
+                        return TBSteamVRActions.tButt_SkeletonRightHand.GetFingerCurl((int)finger);
+                    case TBInput.Controller.LHandController:
+                        return TBSteamVRActions.tButt_SkeletonLeftHand.GetFingerCurl((int)finger);
+                    default:
+                        return 0;
+                }
+            }
+            else
+            {
+                switch (controller)
+                {
+                    case TBInput.Controller.RHandController:
+                        targetFingerCurls = TBSteamVRActions.tButt_SkeletonRightHand.GetFingerCurls();
+                        break;
+                    case TBInput.Controller.LHandController:
+                        targetFingerCurls = TBSteamVRActions.tButt_SkeletonLeftHand.GetFingerCurls();
+                        break;
+                    default:
+                        targetFingerCurls = new float[] { 0, 0, 0, 0, 0 };
+                        break;
+                }
+                return (targetFingerCurls[2] + targetFingerCurls[3] + targetFingerCurls[4]) / 3f;
+            }
         }
 
         #region INPUT CHECKS

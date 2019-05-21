@@ -84,7 +84,7 @@ namespace TButt
 
         void BeforeRender()
         {
-            if (OnFixedUpdate != null)
+            if (OnBeforeRender != null)
                 OnBeforeRender();
         }
 

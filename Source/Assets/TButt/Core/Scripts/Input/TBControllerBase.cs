@@ -20,6 +20,9 @@ namespace TButt.Input
 
         protected T[] thumbPoseButtons;
         protected T[] indexPoseButtons;
+        protected T[] middlePoseButtons;
+        protected T[] ringPoseButtons;
+        protected T[] pinkyPoseButtons;
         protected T[] gripPoseButtons;
 
         public virtual List<TBInput.ButtonDef<T>> GetDefaultDefs()
@@ -31,6 +34,18 @@ namespace TButt.Input
         {
             trackingOffsets = GetDefaultTrackingOffsets();
             SetFingerPoseButtons();
+
+            // Fallback for animating non-dominant fingers.
+            if (gripPoseButtons != null)
+            {
+                if (ringPoseButtons == null)
+                    ringPoseButtons = gripPoseButtons;
+                if (middlePoseButtons == null)
+                    middlePoseButtons = gripPoseButtons;
+                if (pinkyPoseButtons == null)
+                    pinkyPoseButtons = gripPoseButtons;
+            }
+
             loadedButtonDefs = TBInput.LoadButtonDefs<T>(GetDefaultDefs(), fileName);
             lookupTable = TBInput.NewLookupTableFromDefs<T>(loadedButtonDefs);
             loaded = true;
@@ -94,6 +109,12 @@ namespace TButt.Input
                     return thumbPoseButtons;
                 case TBInput.Finger.Index:
                     return indexPoseButtons;
+                case TBInput.Finger.Middle:
+                    return middlePoseButtons;
+                case TBInput.Finger.Ring:
+                    return ringPoseButtons;
+                case TBInput.Finger.Pinky:
+                    return pinkyPoseButtons;
                 case TBInput.Finger.Grip:
                     return gripPoseButtons;
                 default:
