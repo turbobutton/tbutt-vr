@@ -1018,6 +1018,10 @@ namespace TButt
             public T[] Action2;
             public T[] Action3;
             public T[] Action4;
+            public T[] Action5;
+            public T[] Action6;
+            public T[] Action7;
+            public T[] Action8;
             public T[] DpadUp;
             public T[] DpadDown;
             public T[] DpadLeft;
@@ -1079,6 +1083,18 @@ namespace TButt
                     break;
                 case Button.Action4:
                     BindVirtualMapToButton<T>(ref table.Action4, rawButton);
+                    break;
+                case Button.Action5:
+                    BindVirtualMapToButton<T>(ref table.Action5, rawButton);
+                    break;
+                case Button.Action6:
+                    BindVirtualMapToButton<T>(ref table.Action6, rawButton);
+                    break;
+                case Button.Action7:
+                    BindVirtualMapToButton<T>(ref table.Action7, rawButton);
+                    break;
+                case Button.Action8:
+                    BindVirtualMapToButton<T>(ref table.Action8, rawButton);
                     break;
                 case Button.DpadUp:
                     BindVirtualMapToButton<T>(ref table.DpadUp, rawButton);
