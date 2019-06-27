@@ -66,7 +66,7 @@ namespace TButt
                     break;
                 #if TB_HAS_UNITY_PS4
                 case VRPlatform.PlayStationVR:
-                    _settingsBase = TBCore.instance.gameObject.AddComponent<TBSettingsPSVR>();
+                    _settingsBase = TBCore.instance.gameObject.AddComponent<TBPSVRSettings>();
                     break;
                 #endif
                 case VRPlatform.WindowsMR:

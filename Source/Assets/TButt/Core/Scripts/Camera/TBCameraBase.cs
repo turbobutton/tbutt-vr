@@ -19,11 +19,14 @@ namespace TButt
 
         public virtual void Initialize()
         {
-            SetTrackingOrigin(TBSettings.GetCameraSettings().trackingOrigin);
-            TBCameraRig.instance.sortMode = TBSettings.GetDisplaySettings().opaqueSortMode;
-            _camera.depthTextureMode = TBSettings.GetDisplaySettings().depthTextureMode;
-            TBLogging.LogMessage("Opaque Sort Mode set to " + _camera.opaqueSortMode);
-            _camera.allowHDR = false;
+            if (TBCore.GetActivePlatform() != VRPlatform.None)
+            {
+                SetTrackingOrigin(TBSettings.GetCameraSettings().trackingOrigin);
+                TBCameraRig.instance.sortMode = TBSettings.GetDisplaySettings().opaqueSortMode;
+                _camera.depthTextureMode = TBSettings.GetDisplaySettings().depthTextureMode;
+                TBLogging.LogMessage("Opaque Sort Mode set to " + _camera.opaqueSortMode);
+                _camera.allowHDR = false;
+            }
         }
 
         protected virtual void SetTrackingOrigin(TBSettings.TBTrackingOrigin origin)
@@ -35,8 +38,7 @@ namespace TButt
 
         public virtual bool HeadsetHasPositionTracking()
         {
-            // this gets overridden per SDK
-            return true;
+            return TBTracking.HasPositionalTrackingForNode(TBNode.Head);
         }
 
         public virtual void Recenter()
@@ -44,7 +46,18 @@ namespace TButt
             UnityEngine.XR.InputTracking.Recenter();
         }
 
-        protected virtual void OnEnable()
+        public virtual bool HasUserPresence()
+        {
+            switch(UnityEngine.XR.XRDevice.userPresence)
+            {
+                case UnityEngine.XR.UserPresenceState.NotPresent:
+                    return false;
+                default:
+                    return true;
+            }
+        }
+
+    protected virtual void OnEnable()
         {
             TBCameraRig.Events.OnClearFlagsChanged += UpdateClearFlags;
             TBCameraRig.Events.OnBackgroundColorChanged += UpdateBackgroundColor;

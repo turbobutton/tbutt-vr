@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.VR;
+using UnityEngine.XR;
 
 namespace TButt
 {
@@ -11,35 +11,51 @@ namespace TButt
         public new Transform transform;
 
         protected bool _subscribedToUpdate;
-        protected UnityEngine.XR.XRNode _node = UnityEngine.XR.XRNode.CenterEye;
+        protected TBNode _node = TBNode.None;
+        protected XRNode _xrNode = XRNode.CenterEye;
 
         protected bool _overridePosition = false;
         protected Transform _positionTarget;
 
-        public virtual void TrackNode(UnityEngine.XR.XRNode node)
+        protected bool _isTracking;
+        protected bool _isWithinBounds;
+
+        [System.Obsolete]
+        public virtual void TrackNode(XRNode node)
+        {
+            TrackNode((TBNode)node);
+        }
+
+        public virtual void TrackNode(TBNode node)
         {
             transform = GetComponent<Transform>();
             transform.MakeZeroedChildOf(TBCameraRig.instance.GetTrackingVolume());
-			transform.localScale = Vector3.one;
+            transform.localScale = Vector3.one;
             _node = node;
+            _xrNode = (XRNode)node;
 
-#if UNITY_EDITOR
-            switch(node)
+            #if UNITY_EDITOR
+            switch (node)
             {
-                case UnityEngine.XR.XRNode.LeftHand:
+                case TBNode.LeftHand:
                     gameObject.name = "LeftHand";
                     break;
-                case UnityEngine.XR.XRNode.RightHand:
+                case TBNode.RightHand:
                     gameObject.name = "RightHand";
                     break;
-                case UnityEngine.XR.XRNode.GameController:
-                    gameObject.name = "GameController";
+                case TBNode.Gamepad:
+                    gameObject.name = "Gamepad";
+                    break;
+                case TBNode.Controller3DOF:
+                    gameObject.name = "3DOFController";
+                    break;
+                case TBNode.HardwareTracker:
+                    gameObject.name = "Tracker";
                     break;
             }
-#endif
+            #endif
 
-            if (TBTracking.OnNodeConnected != null)
-                TBTracking.OnNodeConnected(node, transform);
+            TBTracking.SendNodeConnectedEvents(node, transform);
         }
 
         public virtual void TogglePositionOverride(bool on, Transform targetTransform = null)
@@ -64,14 +80,20 @@ namespace TButt
             SubscribeToUpdate(false);
         }
 
+        protected virtual void OnUpdate()
+        {
+            OnUpdatePoses();
+            TBTracking.UpdateNodeState(this);
+        }
+
         protected virtual void OnUpdatePoses()
         {
             if (!_overridePosition)
-                transform.localPosition = UnityEngine.XR.InputTracking.GetLocalPosition(_node);
+                transform.localPosition = InputTracking.GetLocalPosition(_xrNode);
             else
                 transform.position = _positionTarget.position;
 
-            transform.localRotation = UnityEngine.XR.InputTracking.GetLocalRotation(_node);
+            transform.localRotation = InputTracking.GetLocalRotation(_xrNode);
         }
 
         protected void SubscribeToUpdate(bool on)
@@ -80,11 +102,59 @@ namespace TButt
                 return;
 
             if(on)
-                TBCore.OnUpdate += OnUpdatePoses;
+                TBCore.OnUpdate += OnUpdate;
             else
-                TBCore.OnUpdate -= OnUpdatePoses;
+                TBCore.OnUpdate -= OnUpdate;
 
             _subscribedToUpdate = on;
         }
+
+        public TBNode GetNodeType()
+        {
+            return _node;
+        }
+
+        #region TRACKING STATUS
+
+        public bool IsTracking
+        {
+            get { return tracking; }
+        }
+
+        public bool IsWithinBounds
+        {
+            get { return withinBounds; }
+        }
+
+        public void SetWithinBounds(bool isWithinBounds)
+        {
+            if (withinBounds != isWithinBounds)
+            {
+                withinBounds = isWithinBounds;
+
+                if(TBTracking.OnNodeWithinBoundsChanged != null)
+                {
+                    TBTracking.OnNodeWithinBoundsChanged(_node, withinBounds);
+                }
+            }
+        }
+
+        public void SetTracking(bool isTracking)
+        {
+            if (tracking != isTracking)
+            {
+                tracking = isTracking;
+
+                if (TBTracking.OnNodeTrackingChanged != null)
+                {
+                    TBTracking.OnNodeTrackingChanged(_node, tracking);
+                }
+            }
+        }
+
+        private bool tracking;
+        private bool withinBounds;
+
+        #endregion
     }
 }

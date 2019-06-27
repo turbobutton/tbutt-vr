@@ -31,7 +31,10 @@ namespace TButt
 
         protected void UpdateFOV()
         {
-            _camera.fieldOfView = TBCameraRig.instance.fieldOfView;
+            if (TBCameraRig.instance.fieldOfView <= 0)
+                TBCameraRig.instance.fieldOfView = 60;
+            else
+                _camera.fieldOfView = TBCameraRig.instance.fieldOfView;
         }
     }
 }

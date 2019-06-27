@@ -10,7 +10,7 @@ namespace TButt
     /// </summary>
     public class TBTrackedNodeHelper : MonoBehaviour
     {
-        public UnityEngine.XR.XRNode nodeToAttachWith;
+        public TBNode nodeToAttachWith;
 
         public Vector3 positionOffset;
         public Vector3 rotationOffset;
@@ -19,7 +19,7 @@ namespace TButt
 
         void OnEnable()
         {
-            TBTracking.OnNodeConnected += AttachToNode;
+            TBTracking.OnNodeCreated += AttachToNode;
             _startingScale = transform.localScale;
             Transform target = TBTracking.GetTransformForNode(nodeToAttachWith);
             if (target != null)
@@ -30,12 +30,10 @@ namespace TButt
 
         void OnDisable()
         {
-            TBTracking.OnNodeConnected -= AttachToNode;
+            TBTracking.OnNodeCreated -= AttachToNode;
         }
 
-
-
-        void AttachToNode(UnityEngine.XR.XRNode node, Transform t)
+        void AttachToNode(TBNode node, Transform t)
         {
             if (node == nodeToAttachWith)
             {

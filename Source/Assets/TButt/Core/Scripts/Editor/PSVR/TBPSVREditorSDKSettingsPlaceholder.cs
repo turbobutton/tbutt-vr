@@ -29,7 +29,7 @@ namespace TButt.Editor
         {
             get
             {
-                return "1.28.0";
+                return "N/A";
             }
         }
 

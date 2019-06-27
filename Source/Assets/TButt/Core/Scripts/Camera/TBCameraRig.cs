@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 namespace TButt
 {
@@ -62,6 +63,7 @@ namespace TButt
             {
                 TBCore.Events.OnVRModeEnabled += EnableVRCamera;
             }
+            SceneManager.activeSceneChanged += OnActiveSceneChanged;
         }
 
         protected virtual void OnDisable()
@@ -70,6 +72,7 @@ namespace TButt
             {
                 TBCore.Events.OnVRModeEnabled -= EnableVRCamera;
             }
+            SceneManager.activeSceneChanged -= OnActiveSceneChanged;
         }
 
         public virtual void Initialize()
@@ -107,15 +110,35 @@ namespace TButt
 
             DestroyTempCamera();
 
-            _audioListenerTransform = new GameObject("AudioListener").transform;
-            _audioListener = _audioListenerTransform.gameObject.AddComponent<AudioListener>();
-            _audioListenerTransform.gameObject.AddComponent<TBAudioListener>();
+            CreateAudioListener();
 
-            if (TBTracking.OnNodeConnected != null)
+            TBTracking.SendNodeConnectedEvents(TBNode.Head, _centerEyeTransform);
+            TBTracking.SendNodeConnectedEvents(TBNode.TrackingVolume, _trackingVolume);
+        }
+
+        protected virtual void OnActiveSceneChanged(Scene oldScene, Scene newScene)
+        {
+            if (_initialized)
             {
-                TBTracking.OnNodeConnected(UnityEngine.XR.XRNode.CenterEye, _centerEyeTransform);
-                TBTracking.OnNodeConnected(UnityEngine.XR.XRNode.Head, _centerEyeTransform);
-                TBTracking.OnNodeConnected(UnityEngine.XR.XRNode.TrackingReference, _trackingVolume);
+                CreateAudioListener();
+            }
+        }
+
+        protected virtual void CreateAudioListener()
+        {
+            if (FindObjectOfType<TBAudioListener>() == null)
+            {
+                // TButt creates a transform that follows the camera for the audio listener
+                // to workaround Unity bugs with audio spatialization when scaling the camera.
+                _audioListenerTransform = new GameObject("AudioListener").transform;
+                _audioListener = _audioListenerTransform.gameObject.AddComponent<AudioListener>();
+                _audioListenerTransform.gameObject.AddComponent<TBAudioListener>();
+                
+                // If the camera rig has been marked as "DontDestroyOnLoad," do the same with the AudioListener.
+                if(gameObject.scene != SceneManager.GetActiveScene())
+                {
+                    DontDestroyOnLoad(_audioListenerTransform.gameObject);
+                }
             }
         }
 
@@ -239,10 +262,12 @@ namespace TButt
                 Destroy(flare);
 
             #if !UNITY_2019_1_OR_NEWER
+            #pragma warning disable 618
             // GUILayer is obsolete, but needs to be removed if it's present from old projects getting upgraded.
             var ui = GetComponent<GUILayer>();
             if (ui != null)
                 Destroy(ui);
+            #pragma warning restore 618
             #endif
 
             var audioListener = GetComponent<AudioListener>();
@@ -447,6 +472,11 @@ namespace TButt
         public bool HasPositionalTracking()
         {
             return _baseCamera.HeadsetHasPositionTracking();
+        }
+
+        public bool HasUserPresence()
+        {
+            return _baseCamera.HasUserPresence();
         }
 
         public static class Events

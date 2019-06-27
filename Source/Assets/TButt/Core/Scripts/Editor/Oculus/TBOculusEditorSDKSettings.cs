@@ -166,7 +166,6 @@ namespace TButt.Editor
 
         protected void ShowDynamicResolutionOptions(ref TBOculusSettings.TBCoreSettingsOculus subplatform)
         {
-          
             EditorGUI.BeginDisabledGroup(!TBOculusSettings.SupportsDynamicResolution(_selectedDeviceFamily));
             if (TBOculusSettings.SupportsDynamicResolution(_selectedDeviceFamily))
             {

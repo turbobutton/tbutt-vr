@@ -183,6 +183,9 @@ namespace TButt.Editor
             ShowRowForFinger(TBInput.Finger.Index, controller);
             ShowRowForFinger(TBInput.Finger.Grip, controller);
             ShowRowForFinger(TBInput.Finger.Thumb, controller);
+            ShowRowForFinger(TBInput.Finger.Middle, controller);
+            ShowRowForFinger(TBInput.Finger.Ring, controller);
+            ShowRowForFinger(TBInput.Finger.Pinky, controller);
 
             EditorGUILayout.EndVertical();
         }

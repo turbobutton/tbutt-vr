@@ -39,10 +39,10 @@ namespace TButt
                     return;
                 }
 
-                SetActivePlatform();
                 #if TB_PSVR && UNITY_PS4
                 TBCore.instance.gameObject.AddComponent<TBPSVRSystemEvents>();
                 #endif
+                SetActivePlatform();
                 Internal.InitializeStartup();
             }
         }
@@ -194,13 +194,16 @@ namespace TButt
             else
             {
                 rig.Initialize();
-                TBTracking.Initialize();
+                TBTracking.Initialize(GetActivePlatform());
             }
         }
 
         private IEnumerator WaitForHMDConnection()
         {
             FindObjectOfType<TBCameraRig>().Initialize();
+            #if UNITY_PS4 && !UNITY_EDITOR
+            TBSettings.Initialize(VRPlatform.PlayStationVR);
+            #endif
 
             while ((UnityEngine.XR.XRSettings.loadedDeviceName == "None") || string.IsNullOrEmpty(UnityEngine.XR.XRSettings.loadedDeviceName))
                 yield return null;
@@ -248,11 +251,11 @@ namespace TButt
         /// <returns></returns>
         public static bool UsingEditorMode()
         {
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             return true;
-#else
+            #else
             return false;
-#endif
+            #endif
         }
 
         public static bool UsingVRMode()
@@ -268,7 +271,7 @@ namespace TButt
                     return true;
             }
         }
-
+        
         /// <summary>
         /// Fires the "on system menu" event for when we're going to or coming from a system-level menu during gameplay.
         /// </summary>
@@ -406,7 +409,7 @@ namespace TButt
         OculusMobile = 3,
         PlayStationVR = 4,
         Daydream = 5,
-        // Cardboard = 6,  // Deprecated, no longer supported
+        // Cardboard = 6,  // no longer supported
         WindowsMR = 7
     }
 }

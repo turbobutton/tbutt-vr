@@ -28,7 +28,7 @@ namespace TButt
         /// <param name="needed"></param>
         void UpdateHandedness(bool needed)
         {
-            if (!needed || (_node != XRNode.GameController))
+            if (!needed || (_node != TBNode.Controller3DOF))
                 return;
 
             switch (TBInput.Get3DOFHandedness())
@@ -48,17 +48,23 @@ namespace TButt
             }
         }
 
+        [System.Obsolete]
         public override void TrackNode(XRNode node)
         {
-            switch(node)
+            TrackNode((TBNode)node);
+        }
+
+        public override void TrackNode(TBNode node)
+        {
+            switch (node)
             {
-                case XRNode.LeftHand:
+                case TBNode.LeftHand:
                     _controller = OVRInput.Controller.LTouch;
                     break;
-                case XRNode.RightHand:
+                case TBNode.RightHand:
                     _controller = OVRInput.Controller.RTouch;
                     break;
-                case XRNode.GameController:
+                case TBNode.Controller3DOF:
                     UpdateHandedness(true);
                     break;
             }
@@ -69,7 +75,10 @@ namespace TButt
         protected override void OnUpdatePoses()
         {
             if (!_overridePosition)
+            {
+                Debug.Log("Controller is " + _controller);
                 transform.localPosition = OVRInput.GetLocalControllerPosition(_controller);
+            }
             else
                 transform.position = _positionTarget.position;
             transform.localRotation = OVRInput.GetLocalControllerRotation(_controller);

@@ -181,7 +181,7 @@ namespace TButt.Editor
             _serviceSettings.Add(TBSteamworksEditorServiceSettings.instance.GetName(), TBSteamworksEditorServiceSettings.instance);
 
             #if TB_HAS_UNITY_PS4
-            sdkSettings.Add(TBPSVREditorServiceSettings.instance.GetName(), TBPSVREditorServiceSettings.instance);
+            // _serviceSettings.Add(TBPSVREditorServiceSettings.instance.GetName(), TBPSVREditorServiceSettings.instance);
             #endif
 
            selectedServices = GetServices();
@@ -208,7 +208,7 @@ namespace TButt.Editor
                     TBSteamworksEditorServiceSettings.instance.SaveSettings();
                     break;
             #if TB_HAS_UNITY_PS4
-            case VRPlatform.PlayStationVR:
+                case VRService.PSN:
                     TBPSVREditorSDKSettings.instance.SaveSettings();
                     break;
             #endif

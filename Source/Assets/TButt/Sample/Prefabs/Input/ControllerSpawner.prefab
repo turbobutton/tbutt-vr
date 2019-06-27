@@ -51,9 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22bb9788f315924499c987c8b6a88408, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  leftHandController: {fileID: 1624031587455698, guid: 9b66def9f7fe4a74e8c34813a5c295a2,
+  leftHandController: {fileID: 1260061068079754, guid: e75519ce760fd734c86ebaa8316eb164,
     type: 2}
-  rightHandController: {fileID: 1992214568330470, guid: dee47414ffa47614e8a050d1ae226168,
+  rightHandController: {fileID: 1260061068079754, guid: cba75fa59450d294aa6761d42118ed99,
     type: 2}
   mobile3DOFController: {fileID: 1940812964245834, guid: 53d2e21f0322e8d4982044a8e0495f51,
     type: 2}
