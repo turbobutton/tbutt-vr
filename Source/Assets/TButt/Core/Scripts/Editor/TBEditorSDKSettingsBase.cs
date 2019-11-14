@@ -128,7 +128,11 @@ namespace TButt.Editor
             EditorGUILayout.Separator();
 
             EditorGUILayout.LabelField("Other");
+            #if UNITY_2019_OR_NEWER
+            settings.blendWeights = (SkinWeights)EditorGUILayout.EnumPopup(new GUIContent("Skin Weights", "Bone count for mesh skinning."), settings.blendWeights);
+            #else
             settings.blendWeights = (BlendWeights)EditorGUILayout.EnumPopup(new GUIContent("Blend Weights", "Bone count for mesh skinning."), settings.blendWeights);
+            #endif      
             settings.LODbias = (float)EditorGUILayout.FloatField(new GUIContent("LOD Bias", "Less than 1 favors less detail, greater than 1 favors high detail."), settings.LODbias);
             settings.maximumLODLevel = (int)EditorGUILayout.IntField(new GUIContent("Maximum LOD Level", "Highest LOD to use (0 is highest quality)."), settings.maximumLODLevel);
             EditorGUILayout.EndToggleGroup();

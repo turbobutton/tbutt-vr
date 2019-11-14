@@ -72,17 +72,18 @@ namespace TButt
             base.TrackNode(node);
         }
 
+        /*
         protected override void OnUpdatePoses()
         {
             if (!_overridePosition)
             {
-                Debug.Log("Controller is " + _controller);
                 transform.localPosition = OVRInput.GetLocalControllerPosition(_controller);
             }
             else
                 transform.position = _positionTarget.position;
             transform.localRotation = OVRInput.GetLocalControllerRotation(_controller);
         }
+        */
         #endif
     }
 }

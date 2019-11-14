@@ -598,6 +598,23 @@ namespace TButt
         }
 
         /// <summary>
+        /// Set rumble for this frame. Optional: Include a frequency for platforms that support it.
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <param name="amount">Betweeen 0 and 1</param>
+        public static void SetRumble(Controller controller = Controller.Active, float strength = 0, float frequency = 0)
+        {
+            // Rumble isn't wrapped on two layers like other functions, so make sure active controller is specified here.
+            if (controller == TBInput.Controller.Active)
+                controller = GetActiveController();
+
+            if (_hasActiveSDK)
+                _activeSDK.SetRumble(controller, strength, frequency);
+            else
+                return;
+        }
+
+        /// <summary>
         /// Set controller rumbles for predefined time intervals.
         /// </summary>
         /// <param name="controller"></param>

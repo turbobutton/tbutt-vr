@@ -18,6 +18,13 @@ public static class TBRendererExtensions
 		r.SetPropertyBlock (block);
 	}
 
+	public static void SetInstancedProperty (this Renderer r, int propertyID, Vector3 value, ref MaterialPropertyBlock block)
+	{
+		r.GetPropertyBlock(block);
+		block.SetVector(propertyID, value);
+		r.SetPropertyBlock(block);
+	}
+
 	public static void SetInstancedProperty (this Renderer[] renderers, int propertyID, Color color, ref MaterialPropertyBlock block)
 	{
 		for (int i = 0; i < renderers.Length; i++)

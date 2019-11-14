@@ -207,20 +207,28 @@ namespace TButt.Settings
                     qualitySettings.antialiasingLevel = TBSettings.TBAntialiasingLevel._2x;
                     qualitySettings.pixelLighCount = 0;
                     qualitySettings.shadowQuality = ShadowQuality.Disable;
+                    #if UNITY_2019_OR_NEWER
+                    qualitySettings.blendWeights = SkinWeights.TwoBones;
+                    #else
                     qualitySettings.blendWeights = BlendWeights.TwoBones;
+                    #endif
                     break;
                 case OculusDeviceFamily.Quest:
                     qualitySettings.antialiasingLevel = TBSettings.TBAntialiasingLevel._4x;
                     qualitySettings.pixelLighCount = 0;
                     qualitySettings.shadowQuality = ShadowQuality.Disable;
+                    #if UNITY_2019_OR_NEWER
+                    qualitySettings.blendWeights = SkinWeights.TwoBones;
+                    #else
                     qualitySettings.blendWeights = BlendWeights.TwoBones;
+                    #endif
                     break;
             }
 
             return qualitySettings;
         }
 
-        #region OCULUS SDK INTERFACES
+#region OCULUS SDK INTERFACES
         IEnumerator ApplySettingsToOVRManager()
         {
             yield return TBYielders.EndOfFrame;
@@ -233,36 +241,36 @@ namespace TButt.Settings
 
         public static void SetFixedFoveatedRenderingLevel(FixedFoveatedRenderingLevel level)
         {
-        #if TB_OCULUS
+#if TB_OCULUS
             if (SupportsFixedFoveatedRendering(GetOculusDeviceFamily()))
             {
                 switch (level)
                 {
                     case FixedFoveatedRenderingLevel.Low:
-                        OVRManager.tiledMultiResLevel = OVRManager.TiledMultiResLevel.LMSLow;
+                        OVRManager.fixedFoveatedRenderingLevel = OVRManager.FixedFoveatedRenderingLevel.Low;
                         break;
                     case FixedFoveatedRenderingLevel.Medium:
-                        OVRManager.tiledMultiResLevel = OVRManager.TiledMultiResLevel.LMSMedium;
+                        OVRManager.fixedFoveatedRenderingLevel = OVRManager.FixedFoveatedRenderingLevel.Medium;
                         break;
                     case FixedFoveatedRenderingLevel.High:
-                        OVRManager.tiledMultiResLevel = OVRManager.TiledMultiResLevel.LMSHigh;
+                        OVRManager.fixedFoveatedRenderingLevel = OVRManager.FixedFoveatedRenderingLevel.High;
                         break;
                     default:
-                        OVRManager.tiledMultiResLevel = OVRManager.TiledMultiResLevel.Off;
+                        OVRManager.fixedFoveatedRenderingLevel = OVRManager.FixedFoveatedRenderingLevel.Off;
                         break;
                 }
-                TBLogging.LogMessage("Fixed foveated rendering amount is now  " + OVRManager.tiledMultiResLevel);
+                TBLogging.LogMessage("Fixed foveated rendering amount is now  " + OVRManager.fixedFoveatedRenderingLevel);
             }
             else
             {
                 // TBLogging.LogMessage("Fixed foveated rendering not supported on " + GetOculusDeviceFamily());
             }
-        #endif
+#endif
         }
 
         public static void SetRefreshRate(TBOculusMobileRefreshRate rate)
         {
-        #if TB_OCULUS
+#if TB_OCULUS
             if (SupportsMultipleRefreshRates(GetOculusDeviceFamily()))
             {
                 switch (rate)
@@ -280,7 +288,7 @@ namespace TButt.Settings
             {
                // TBLogging.LogMessage("Alternate refresh rates not supported on " + GetOculusDeviceFamily());
             }
-        #endif
+#endif
         }
 #endregion
 

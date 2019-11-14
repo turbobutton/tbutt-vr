@@ -12,6 +12,8 @@ namespace TButt
 
         private static ITBSDKTracking _activeSDK;
 
+        private static Bounds _activeBounds;
+
         [System.Obsolete("Use TrackingNodeEvent with TBNode instead of Unity XR nodes.")]
         public delegate void TrackingEvent(UnityEngine.XR.XRNode node, Transform nodeTransform);
         public delegate void NodeCreationEvent(TBNode node, Transform nodeTransform);
@@ -37,6 +39,9 @@ namespace TButt
         {
             if (_nodes != null)
                 _nodes.Clear();
+
+            if(_activeBounds != null)
+                _activeBounds = new Bounds();
 
             switch (platform)
             {
@@ -66,7 +71,7 @@ namespace TButt
                     break;
                 default:
                     UnityEngine.Debug.LogError("Attempted to initialize TBInput without an active SDK in TBCore. This shouldn't happen if TBCore exists in your scene.");
-                    break;
+                    return;
             }
 
             // Add tracked controller nodes under the camera rig if we need them.
@@ -100,6 +105,7 @@ namespace TButt
             if(newNode != null)
             {
                 _nodes.Add(node, newNode);
+                TBLogging.LogMessage("Added node for " + node);
             }
             else
             {
@@ -192,6 +198,25 @@ namespace TButt
         public static bool HasPositionalTrackingForNode(TBNode node)
         {
             return _activeSDK.HasPositionalTrackingForNode(node);
+        }
+
+        public static bool HasPlayspaceBounds()
+        {
+            return _activeSDK.GetPlayspaceDimensions() != Vector2.zero;
+        }
+
+        public static bool IsPointWithinPlayspaceBounds(Vector3 point)
+        {
+            _activeBounds.center = GetTransformForNode(TBNode.TrackingVolume).position;
+            point.y = _activeBounds.center.y;
+            return _activeBounds.Contains(point);
+        }
+
+        static void RefreshBounds()
+        {
+            Vector2 startingDimensions = _activeSDK.GetPlayspaceDimensions();
+            _activeBounds.size = new Vector3(startingDimensions.x, 1f, startingDimensions.y);
+            _activeBounds.center = GetTransformForNode(TBNode.TrackingVolume).position;
         }
     }
 

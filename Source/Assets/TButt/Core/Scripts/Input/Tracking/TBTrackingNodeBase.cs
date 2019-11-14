@@ -102,9 +102,9 @@ namespace TButt
                 return;
 
             if(on)
-                TBCore.OnUpdate += OnUpdate;
+                TBCore.OnLateUpdate += OnUpdate;
             else
-                TBCore.OnUpdate -= OnUpdate;
+                TBCore.OnLateUpdate -= OnUpdate;
 
             _subscribedToUpdate = on;
         }

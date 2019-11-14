@@ -17,6 +17,7 @@ namespace TButt.Input
         protected List<TBInput.ButtonDef<T>> loadedButtonDefs;
         protected TBInput.ButtonLookupTable<T> lookupTable;
         protected HandTrackingOffsets trackingOffsets;
+        protected bool _isRumbling;
 
         protected T[] thumbPoseButtons;
         protected T[] indexPoseButtons;
@@ -129,6 +130,16 @@ namespace TButt.Input
             newTrackingOffsets.rotationOffset = Vector3.zero;
 
             return newTrackingOffsets;
+        }
+
+        public virtual bool IsRumbling
+        {
+            get { return _isRumbling; }
+        }
+
+        public virtual void SetRumbling(bool on)
+        {
+            _isRumbling = on;
         }
     }
 

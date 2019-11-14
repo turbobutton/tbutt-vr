@@ -28,18 +28,12 @@ namespace TButt.Input
         }
 
         #if TB_OCULUS
-        // Cache rumble / haptics clips.
-        private OVRHapticsClip _leftRumble;
-        private OVRHapticsClip _rightRumble;
-        private int _numHapticSamples = 0;
+        private bool _leftRumble = false;
+        private bool _rightRumble = false;
 
         #region CONTROLLER LOADING
         protected override void LoadHandControllers()
         {
-            _numHapticSamples = (int)(320 / TBSettings.GetRefreshRate()) + 1; // Oculus Touch haptics update at 320hz.
-            _leftRumble = new OVRHapticsClip(_numHapticSamples);
-            _rightRumble = new OVRHapticsClip(_numHapticSamples);
-
             if (TBCore.GetActivePlatform() == VRPlatform.OculusMobile)
             {
                 switch (Settings.TBOculusSettings.GetOculusDeviceFamily())
@@ -116,7 +110,13 @@ namespace TButt.Input
     
         public override void Update()
         {
-
+            switch (TBInput.GetActiveControlType())
+            {
+                case TBInput.ControlType.HandControllers:
+                    UpdateRumbleState(TBInput.Controller.LHandController);
+                    UpdateRumbleState(TBInput.Controller.RHandController);
+                    break;
+            }
         }
 
         public override void FixedUpdate()
@@ -188,28 +188,16 @@ namespace TButt.Input
             }
         }
 
-        public override bool SetRumble(TBInput.Controller controller, float strength)
+        protected override void StopRumbleInternal (TBInput.Controller controller)
         {
             switch(controller)
             {
                 case TBInput.Controller.LHandController:
-                    _leftRumble = new OVRHapticsClip(_numHapticSamples);
-                    for (int i = 0; i < _numHapticSamples; i++)
-                    {
-                        _leftRumble.WriteSample((byte)(255 * strength));
-                    }
-                    OVRHaptics.LeftChannel.Preempt(_leftRumble);
-                    return true;
+                    OVRInput.SetControllerVibration(0f, 0f, OVRInput.Controller.LTouch);
+                    break;
                 case TBInput.Controller.RHandController:
-                    _rightRumble = new OVRHapticsClip(_numHapticSamples);
-                    for (int i = 0; i < _numHapticSamples; i++)
-                    {
-                        _rightRumble.WriteSample((byte)(255 * strength));
-                    }
-                    OVRHaptics.RightChannel.Preempt(_rightRumble);
-                    return true;
-                default:
-                    return false;
+                    OVRInput.SetControllerVibration(0f, 0f, OVRInput.Controller.RTouch);
+                    break;
             }
         }
 
@@ -295,6 +283,23 @@ namespace TButt.Input
         public override Vector3 GetAcceleration(TBInput.Controller controller)
         {
             return OVRInput.GetLocalControllerAcceleration(GetOculusControllerID(controller));
+        }
+
+        protected override bool ResolveRumble(TBInput.Controller controller, float strength = 0.5F, float frequency = 0.5F)
+        {
+            switch (controller)
+            {
+                case TBInput.Controller.LHandController:
+                    controller_LHand.SetRumbling(true);
+                    OVRInput.SetControllerVibration(frequency, strength, OVRInput.Controller.LTouch);
+                    return true;
+                case TBInput.Controller.RHandController:
+                    controller_RHand.SetRumbling(true);
+                    OVRInput.SetControllerVibration(frequency, strength, OVRInput.Controller.RTouch);
+                    return true;
+                default:
+                    return false;
+            }
         }
         #endregion
 

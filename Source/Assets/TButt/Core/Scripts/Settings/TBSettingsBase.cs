@@ -65,7 +65,11 @@ namespace TButt.Settings
             qualitySettings.maximumLODLevel = 0;
             qualitySettings.shadowProjection = ShadowProjection.CloseFit;
             qualitySettings.shadowDistance = 100;
+            #if UNITY_2019_OR_NEWER
+            qualitySettings.blendWeights = SkinWeights.FourBones;
+            #else
             qualitySettings.blendWeights = BlendWeights.FourBones;
+            #endif
             return qualitySettings;
         }
 

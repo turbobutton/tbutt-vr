@@ -391,11 +391,11 @@ namespace TButt
 
             public static bool IsValidSetup()
             {
-#if TB_OCULUS || TB_STEAM_VR || TB_PSVR || TB_GOOGLE || TB_WINDOWS_MR || TB_STEAM_VR_2
+                #if TB_OCULUS || TB_STEAM_VR || TB_PSVR || TB_GOOGLE || TB_WINDOWS_MR || TB_STEAM_VR_2
                 return true;
-#else
+                #else
                 return false;
-#endif
+                #endif
             }
         }
     }

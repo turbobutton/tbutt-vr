@@ -27,6 +27,7 @@ namespace TButt.Input
         float GetAxis1D(TBInput.Button button, TBInput.Controller controller);
         Vector2 GetAxis2D(TBInput.Button button, TBInput.Controller controller);
         bool SetRumble(TBInput.Controller controller, float amount);
+        bool SetRumble(TBInput.Controller controller, float strength, float frequency);
         void StartRumblePulse(TBInput.Controller controller, float strength, float length);
 
         // Tracking checks
@@ -141,6 +142,18 @@ namespace TButt.Input
                 TBCore.instance.StartCoroutine(RefreshInputRoutine());
         }
 
+        public virtual void UpdateRumbleState(TBInput.Controller controller)
+        {
+            if(GetControllerForType(controller).IsRumbling)
+            {
+                GetControllerForType(controller).SetRumbling(false);
+            }
+            else
+            {
+                StopRumbleInternal(controller);
+            }
+        }
+
         protected virtual IEnumerator RefreshInputRoutine()
         {
             switch (TBInput.GetActiveControlType())
@@ -249,7 +262,7 @@ namespace TButt.Input
             return TBInput.GetRawButtons<T>(button, GetButtonLookupTableForController(controller));
         }
 
-               #region INPUT CHECKS - GET FUNCTIONS
+        #region INPUT CHECKS - GET FUNCTIONS
         // The "Get" functions rely on the generic type T, which gets filled in by the classes that extend this one for each SDK.
         public virtual bool GetButtonDown(TBInput.Button button, TBInput.Controller controller)
         {
@@ -397,10 +410,19 @@ namespace TButt.Input
             return Vector3.zero;
         }
 
+        protected virtual void StopRumbleInternal(TBInput.Controller controller)
+        {
+            return;
+        }
+
         public virtual bool SetRumble(TBInput.Controller controller, float strength)
         {
-            TBLogging.LogMessage("Rumble is not implemented for this platform.");
-            return false;
+            return SetRumble(controller, strength, 0.5f);
+        }
+
+        public virtual bool SetRumble(TBInput.Controller controller, float strength, float frequency)
+        {
+            return ResolveRumble(controller, strength, frequency);
         }
 
         public virtual void StartRumblePulse(TBInput.Controller controller, float strength, float length)
@@ -547,6 +569,11 @@ namespace TButt.Input
 
             _activeController = controller;
             // TODO: fire an event when controller is changed
+        }
+
+        protected virtual bool ResolveRumble(TBInput.Controller controller, float strength = 0.5f, float frequency = 0.5f)
+        {
+            return false;
         }
         #endregion
 
@@ -713,5 +740,6 @@ namespace TButt.Input
             return new HandTrackingOffsets();
         }
         #endregion
+
     }
 }

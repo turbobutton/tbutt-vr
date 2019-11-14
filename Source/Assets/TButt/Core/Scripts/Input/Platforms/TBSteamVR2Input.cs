@@ -184,13 +184,13 @@ namespace TButt.Input
             return SteamVR_Input_Sources.Head;
         }
 
-        public override bool SetRumble(TBInput.Controller controller, float strength)
+        public override bool SetRumble(TBInput.Controller controller, float strength, float frequency)
         {
             switch (controller)
             {
                 case TBInput.Controller.LHandController:
                 case TBInput.Controller.RHandController:
-                    TBSteamVRActions.tButt_Haptic.Execute(0f, Time.unscaledDeltaTime, 100, strength, GetSteamVRInputSource(controller));
+                    TBSteamVRActions.tButt_Haptic.Execute(0f, Time.unscaledDeltaTime, frequency, strength, GetSteamVRInputSource(controller));
                     return true;
             }
 

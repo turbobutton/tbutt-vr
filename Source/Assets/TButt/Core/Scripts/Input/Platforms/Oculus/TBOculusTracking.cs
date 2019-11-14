@@ -19,7 +19,22 @@ namespace TButt.Input
             }
         }
 
-        #if TB_OCULUS
+        bool PressedLeft()
+        {
+            switch(TBInput.GetActiveControlType())
+            {
+                case TBInput.ControlType.HandControllers:
+                    if (TBInput.GetAxis2D(TBInput.Button.Joystick, TBInput.Controller.LHandController).x < -0.1f)
+                        return true;
+                    if (TBInput.GetAxis2D(TBInput.Button.Joystick, TBInput.Controller.RHandController).x < -0.1f)
+                        return true;
+                    return false;
+                default:
+                    return TBInput.GetAxis2D(TBInput.Button.Joystick).x < -0.1f;
+            }
+        }
+
+#if TB_OCULUS
         public override void UpdateNodeState(TBTrackingNodeBase node)
         {
             switch(node.GetNodeType())
