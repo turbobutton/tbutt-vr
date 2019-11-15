@@ -123,6 +123,7 @@ namespace TButt.Input
         protected virtual TBTrackingNodeBase AddNode(TBNode node, GameObject go)
         {
             TBTrackingNodeBase nodeComponent = go.AddComponent<TBTrackingNodeBase>();
+            nodeComponent.TrackNode(node);
             return nodeComponent;
         }
 

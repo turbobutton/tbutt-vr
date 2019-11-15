@@ -9,7 +9,7 @@ namespace TButt
     public static class TBTracking
     {
         private static Dictionary<TBNode, TBTrackingNodeBase> _nodes;
-
+        private static Dictionary<VRPlatform, ITBSDKTracking> _trackingSDKs;
         private static ITBSDKTracking _activeSDK;
 
         private static Bounds _activeBounds;
@@ -43,36 +43,7 @@ namespace TButt
             if(_activeBounds != null)
                 _activeBounds = new Bounds();
 
-            switch (platform)
-            {
-                case VRPlatform.OculusPC:
-                case VRPlatform.OculusMobile:
-                    _activeSDK = TBOculusTracking.instance;
-                    break;
-                case VRPlatform.SteamVR:
-                    #if TB_STEAM_VR_2
-                    _activeSDK = TBSteamVR2Tracking.instance;
-                    #else
-                    _activeSDK = TBSteamVRTracking.instance;
-                    #endif
-                    break;
-                case VRPlatform.Daydream:
-                    _activeSDK = TBGoogleTracking.instance;
-                    break;
-                case VRPlatform.PlayStationVR:
-                    #if TB_HAS_UNITY_PS4
-                    _activeSDK = TBPSVRTracking.instance;
-                    #else
-                    UnityEngine.Debug.LogError("TBInput attempted to initialize for PSVR, but the PSVR module is not available. Is the module installed and set up with #TB_HAS_UNITY_PS4?");
-                    #endif
-                    break;
-                case VRPlatform.WindowsMR:
-                    _activeSDK = TBWindowsMRTracking.instance;
-                    break;
-                default:
-                    UnityEngine.Debug.LogError("Attempted to initialize TBInput without an active SDK in TBCore. This shouldn't happen if TBCore exists in your scene.");
-                    return;
-            }
+            _activeSDK = GetTrackingSDK(platform);
 
             // Add tracked controller nodes under the camera rig if we need them.
             if (TBSettings.GetControlSettings().supportsHandControllers)
@@ -197,7 +168,10 @@ namespace TButt
 
         public static bool HasPositionalTrackingForNode(TBNode node)
         {
-            return _activeSDK.HasPositionalTrackingForNode(node);
+            if (_activeSDK == null)
+                return GetTrackingSDK(TBCore.GetActivePlatform()).HasPositionalTrackingForNode(node);
+            else
+                return _activeSDK.HasPositionalTrackingForNode(node);
         }
 
         public static bool HasPlayspaceBounds()
@@ -217,6 +191,35 @@ namespace TButt
             Vector2 startingDimensions = _activeSDK.GetPlayspaceDimensions();
             _activeBounds.size = new Vector3(startingDimensions.x, 1f, startingDimensions.y);
             _activeBounds.center = GetTransformForNode(TBNode.TrackingVolume).position;
+        }
+
+        static ITBSDKTracking GetTrackingSDK(VRPlatform platform)
+        {
+            switch (platform)
+            {
+                case VRPlatform.OculusPC:
+                case VRPlatform.OculusMobile:
+                    return TBOculusTracking.instance;
+                case VRPlatform.SteamVR:
+                    #if TB_STEAM_VR_2
+                    return TBSteamVR2Tracking.instance;
+                    #else
+                    return TBSteamVRTracking.instance;
+                    #endif
+                case VRPlatform.Daydream:
+                    return TBGoogleTracking.instance;
+                case VRPlatform.PlayStationVR:
+                    #if TB_HAS_UNITY_PS4
+                    return TBPSVRTracking.instance;
+                    #else
+                    UnityEngine.Debug.LogError("TBInput attempted to initialize for PSVR, but the PSVR module is not available. Is the module installed and set up with #TB_HAS_UNITY_PS4?");
+                    #endif
+                case VRPlatform.WindowsMR:
+                    return TBWindowsMRTracking.instance;
+                default:
+                    UnityEngine.Debug.LogError("Attempted to initialize TBInput without an active SDK in TBCore. This shouldn't happen if TBCore exists in your scene.");
+                    return null;
+            }
         }
     }
 

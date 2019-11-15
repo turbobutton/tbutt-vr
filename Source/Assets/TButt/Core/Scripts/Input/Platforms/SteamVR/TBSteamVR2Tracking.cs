@@ -71,12 +71,12 @@ namespace TButt.Input
 
         public override bool IsPointWithinPlayspace(Vector3 point)
         {
-            return OVRManager.boundary.TestPoint(point, OVRBoundary.BoundaryType.PlayArea).IsTriggering == false;
+            return true;
         }
 
         public override bool IsPointWithinUserBoundary(Vector3 point)
         {
-            return OVRManager.boundary.TestPoint(point, OVRBoundary.BoundaryType.OuterBoundary).IsTriggering == false;
+            return true;
         }
         #endregion
 

@@ -20,6 +20,16 @@ namespace TButt
         protected bool _isTracking;
         protected bool _isWithinBounds;
 
+        protected virtual void OnEnable()
+        {
+            SubscribeToUpdate(true);
+        }
+
+        protected virtual void OnDisable()
+        {
+            SubscribeToUpdate(false);
+        }
+
         [System.Obsolete]
         public virtual void TrackNode(XRNode node)
         {
@@ -68,16 +78,6 @@ namespace TButt
                     targetTransform = TBCameraRig.instance.transform;
                 _positionTarget = targetTransform;
             }
-        }
-
-        protected virtual void OnEnable()
-        {
-            SubscribeToUpdate(true);
-        }
-
-        protected virtual void OnDisable()
-        {
-            SubscribeToUpdate(false);
         }
 
         protected virtual void OnUpdate()
